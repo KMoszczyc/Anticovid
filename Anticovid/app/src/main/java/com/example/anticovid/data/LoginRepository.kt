@@ -1,9 +1,8 @@
 package com.example.anticovid.data
 
 import com.example.anticovid.data.model.LoggedInUser
-import com.example.anticovid.ui.login.LoginCallbackListener
+import com.example.anticovid.data.model.Result
 import com.google.firebase.auth.FirebaseAuth
-import java.io.IOException
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -12,14 +11,13 @@ import java.io.IOException
 
 class LoginRepository {
 
-    // in-memory cache of the loggedInUser object
+    var loginCallbackListener: LoginCallbackListener? = null
+
     var user: LoggedInUser? = null
         private set
 
     val isLoggedIn: Boolean
         get() = user != null
-
-    var loginCallbackListener: LoginCallbackListener? = null
 
     private val mAuth = FirebaseAuth.getInstance()
 
@@ -29,27 +27,45 @@ class LoginRepository {
         }
     }
 
-    fun logout() {
+    fun signOut() {
         user = null
         mAuth.signOut()
     }
 
-    fun login(username: String, password: String) {
-        mAuth.signInWithEmailAndPassword(username, password)
+    fun signIn(email: String, password: String) {
+        mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    mAuth.currentUser?.let {
-                        val loggedInUser = LoggedInUser(it.uid, it.displayName ?: "")
-                        user = loggedInUser
-                        loginCallbackListener?.onLoginResult(Result.Success(loggedInUser))
-                    }
-                }
+                if (task.isSuccessful)
+                    onSuccessfulLogin()
                 else
-                {
-                    task.exception?.let {
-                        loginCallbackListener?.onLoginResult(Result.Error(IOException(it.message, it)))
-                    }
-                }
+                    onLoginError(task.exception?.message ?: "Error")
             }
+    }
+
+    fun signUp(email: String, password: String) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful)
+                    onSuccessfulLogin()
+                else
+                    onLoginError(task.exception?.message ?: "Error")
+            }
+    }
+
+    private fun onSuccessfulLogin() {
+        mAuth.currentUser?.let {
+            LoggedInUser(it.uid, it.displayName ?: "").apply {
+                user = this
+                loginCallbackListener?.onLoginResult(Result.Success(this))
+            }
+        }
+    }
+
+    private fun onLoginError(message: String) {
+        loginCallbackListener?.onLoginResult(Result.Error(message))
+    }
+
+    interface LoginCallbackListener {
+        fun onLoginResult(result: Result<LoggedInUser>)
     }
 }

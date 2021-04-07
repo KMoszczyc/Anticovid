@@ -1,115 +1,123 @@
 package com.example.anticovid.ui.login
 
-import android.app.Activity
-import androidx.lifecycle.Observer
+import android.content.Context
+import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.Button
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-
+import com.example.anticovid.ui.main.MainActivity
 import com.example.anticovid.R
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var loginViewModel: LoginViewModel
+    lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
+        supportActionBar?.hide()
 
-        val username = findViewById<EditText>(R.id.username)
-        val password = findViewById<EditText>(R.id.password)
-        val login = findViewById<Button>(R.id.login)
-        val loading = findViewById<ProgressBar>(R.id.loading)
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory()).get(LoginViewModel::class.java)
 
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-                .get(LoginViewModel::class.java)
+        loginViewModel.loginForm.observe(this, Observer { loginForm ->
+            if (loginForm == null)
+                return@Observer
 
-        loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
-            val loginState = it ?: return@Observer
-
-            // disable login button unless both username / password is valid
-            login.isEnabled = loginState.isDataValid
-
-            if (loginState.usernameError != null) {
-                username.error = getString(loginState.usernameError)
-            }
-            if (loginState.passwordError != null) {
-                password.error = getString(loginState.passwordError)
+            // attach new fragment
+            when (loginForm) {
+                LoginForm.SignIn ->
+                    attachFragment(supportFragmentManager.findFragmentByTag("SignInFragment") ?: SignInFragment(), "SignInFragment")
+                LoginForm.SignUp ->
+                    attachFragment(supportFragmentManager.findFragmentByTag("SignUpFragment") ?: SignUpFragment(), "SignUpFragment")
             }
         })
 
-        loginViewModel.loginResult.observe(this@LoginActivity, Observer {
-            val loginResult = it ?: return@Observer
+        loginViewModel.loginResult.observe(this, Observer { loginResult ->
+            if (loginResult == null)
+                return@Observer
 
-            loading.visibility = View.GONE
-            if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
-            }
+            // take action on successful login
             if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+                finish()
             }
-            setResult(Activity.RESULT_OK)
-
-            //Complete and destroy login activity once successful
-            finish()
         })
 
-        username.afterTextChanged {
-            loginViewModel.loginDataChanged(
-                    username.text.toString(),
-                    password.text.toString()
-            )
-        }
+        loginViewModel.isLoading.observe(this, Observer { isLoading ->
+            if (isLoading == null)
+                return@Observer
 
-        password.apply {
-            afterTextChanged {
-                loginViewModel.loginDataChanged(
-                        username.text.toString(),
-                        password.text.toString()
-                )
-            }
-
-            setOnEditorActionListener { _, actionId, _ ->
-                when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                                username.text.toString(),
-                                password.text.toString()
-                        )
-                }
-                false
-            }
-
-            login.setOnClickListener {
+            // update UI
+            if (isLoading) {
+                clearFocus()
+                hideSoftKeyboard()
+                disableTouchEvents()
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+            }
+            else {
+                loading.visibility = View.GONE
+                enableTouchEvents()
+            }
+        })
+
+        // handle keyboard events
+        container.viewTreeObserver.addOnGlobalLayoutListener {
+            val r = Rect()
+            container.getWindowVisibleDisplayFrame(r)
+            val screenHeight = container.rootView.height
+
+            // r.bottom is the position above soft keypad or device button.
+            // if keypad is shown, the r.bottom is smaller than that before.
+            val keypadHeight = screenHeight - r.bottom
+
+            if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                // keyboard is opened
+                if (loginViewModel.isKeyboardVisible.value == false)
+                    loginViewModel.onKeyboardVisibilityChanged(true)
+            }
+            else {
+                // keyboard is closed
+                if (loginViewModel.isKeyboardVisible.value == true)
+                    loginViewModel.onKeyboardVisibilityChanged(false)
             }
         }
     }
 
-    private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
-        // TODO : initiate successful logged in experience
-        Toast.makeText(
-                applicationContext,
-                "$welcome $displayName",
-                Toast.LENGTH_LONG
-        ).show()
+    private fun attachFragment(fragment: Fragment, tag: String) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, tag).commit()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
-        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    private fun clearFocus() {
+        container.requestFocus()
+    }
+
+    private fun hideSoftKeyboard() {
+        currentFocus?.let { view ->
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
+    private fun enableTouchEvents() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    private fun disableTouchEvents() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
     }
 }
 

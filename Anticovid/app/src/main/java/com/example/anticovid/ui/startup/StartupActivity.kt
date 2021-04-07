@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.widget.Toast
+import com.example.anticovid.ui.main.MainActivity
 import com.example.anticovid.R
 import com.example.anticovid.ui.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -24,14 +24,13 @@ class StartupActivity : AppCompatActivity() {
             // check if user is signed in and open appropriate activity
             if (mAuth.currentUser != null) {
                 // Open MainActivity
-                // TODO
-                Toast.makeText(this, "User signed in", Toast.LENGTH_LONG).show()
+                startActivity(Intent(applicationContext, MainActivity::class.java))
             }
             else {
                 // Open LoginActivity
                 startActivity(Intent(applicationContext, LoginActivity::class.java))
-                finish()
             }
+            finish()
         },2000)
     }
 }
