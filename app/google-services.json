@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "589437913066",
+    "project_id": "anticovid-93262",
+    "storage_bucket": "anticovid-93262.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589437913066:android:fe1afa4fcf9c7f7d8e1493",
+        "android_client_info": {
+          "package_name": "com.example.anticovid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "589437913066-m4rsgr4b6imld5v4pijv7oolvv2rd0d8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYvp9UPNXAzrpN7hc7ToYqiSx4tH0cVQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "589437913066-m4rsgr4b6imld5v4pijv7oolvv2rd0d8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

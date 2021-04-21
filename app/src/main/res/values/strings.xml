@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Anticovid</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_email">Invalid email address</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_repeated_password">Invalid repeated password</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="sign_in">"Sign in"</string>
+    <string name="sign_up">"Sign up"</string>
+    <string name="not_having_an_account">Not having an Account?</string>
+    <string name="already_have_an_account">Already have an Account?</string>
+    <string name="email">"Email"</string>
+    <string name="email_hint">"jankowalski@gmail.com"</string>
+    <string name="password">"Password"</string>
+    <string name="password_hint">"********"</string>
+    <string name="repeat_password">"Repeat password"</string>
+</resources>
