@@ -11,22 +11,10 @@ class ApiManager {
     lateinit var countryDataHistory: List<CountryRawDataModel>
     lateinit var currentCountry : CountryLiveDataModel
 
-    fun getCovidDataJSON(countryName: String) : String {
+    //  another way
+    fun getCovidDataJSON(countryName: String): String {
         var responseString = ""
-        val request = Fuel.get("https://api.covid19api.com/live/country/$countryName")
-            .response { request, response, result ->
-                val (bytes, error) = result
-                if (bytes != null) {
-                    responseString = String(bytes)
-                }
-            }
-        request.join()
-        return responseString;
-    }
-
-    fun getCovidDataJSON2(countryName: String): String {
-        var responseString = ""
-        val httpAsync = "https://api.covid19api.com/live/country/$countryName"
+        val httpAsync = "$COVID_API_COUNTRY_URL$countryName"
             .httpGet()
             .responseString { request, response, result ->
                 when (result) {
@@ -109,16 +97,24 @@ class ApiManager {
                     Recovered = acc.Recovered + element.Recovered,
                     Active = acc.Active + element.Active,
                     Date = element.Date)
-            }
-            .values.toList()
+            }.values.toList()
         return result
     }
 
-    fun fetchCovidData(countryName: String): CountryLiveDataModel {
-        var responseString = getCovidDataJSON2(countryName)
-        var countryProvinceDataHistory = gson.fromJson(responseString, Array<CountryRawDataModel>::class.java).toList()
-        countryDataHistory = aggregateCountryProvinceData(countryProvinceDataHistory)
-        currentCountry = createLiveCountryModel()
+    fun fetchCovidData(countryName: String): CountryLiveDataModel? {
+        var responseString = getCovidDataJSON(countryName)
+
+        println("response: $responseString")
+        if(responseString!="") {
+            var countryProvinceDataHistory = gson.fromJson(responseString, Array<CountryRawDataModel>::class.java).toList()
+            countryDataHistory = aggregateCountryProvinceData(countryProvinceDataHistory)
+            currentCountry = createLiveCountryModel()
+        }
+        else {
+            println("Covid-19 api is not responding! :(")
+            return null
+        }
+
 
 //        ___________________________FOR DEBUGGING___________________________
 //        val indexLast7 = countryDataHistory.size-8
@@ -145,6 +141,6 @@ class ApiManager {
 
     companion object {
         const val BASE_URL_COVID_API = "https://api.covid19api.com/"
-        const val COUNTRY_URL = "https://api.covid19api.com/live/country/"
+        const val COVID_API_COUNTRY_URL = "https://api.covid19api.com/live/country/"
     }
 }

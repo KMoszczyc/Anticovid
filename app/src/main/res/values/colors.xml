@@ -8,4 +8,7 @@
     <color name="colorTextError">#FF0000</color>
     <color name="colorBackgroundWhite">#FFFFFF</color>
     <color name="colorBackgroundDisabled">#939393</color>
+    <color name="colorMainThemeBlue">#4DABF5</color>
+    <color name="colorStateGreen">#4CAF50</color>
+
 </resources>
