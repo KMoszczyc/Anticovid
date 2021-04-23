@@ -1,0 +1,248 @@
+ALA Aland Islands_AX
+Afghanistan_AF
+Albania_AL
+Algeria_DZ
+American Samoa_AS
+Andorra_AD
+Angola_AO
+Anguilla_AI
+Antarctica_AQ
+Antigua and Barbuda_AG
+Argentina_AR
+Armenia_AM
+Aruba_AW
+Australia_AU
+Austria_AT
+Azerbaijan_AZ
+Bahamas_BS
+Bahrain_BH
+Bangladesh_BD
+Barbados_BB
+Belarus_BY
+Belgium_BE
+Belize_BZ
+Benin_BJ
+Bermuda_BM
+Bhutan_BT
+Bolivia_BO
+Bosnia and Herzegovina_BA
+Botswana_BW
+Bouvet Island_BV
+Brazil_BR
+British Indian Ocean Territory_IO
+British Virgin Islands_VG
+Brunei Darussalam_BN
+Bulgaria_BG
+Burkina Faso_BF
+Burundi_BI
+Cambodia_KH
+Cameroon_CM
+Canada_CA
+Cape Verde_CV
+Cayman Islands_KY
+Central African Republic_CF
+Chad_TD
+Chile_CL
+China_CN
+Christmas Island_CX
+Cocos (Keeling) Islands_CC
+Colombia_CO
+Comoros_KM
+Congo (Brazzaville)_CG
+Congo (Kinshasa)_CD
+Cook Islands_CK
+Costa Rica_CR
+Croatia_HR
+Cuba_CU
+Cyprus_CY
+Czech Republic_CZ
+Côte d'Ivoire_CI
+Denmark_DK
+Djibouti_DJ
+Dominica_DM
+Dominican Republic_DO
+Ecuador_EC
+Egypt_EG
+El Salvador_SV
+Equatorial Guinea_GQ
+Eritrea_ER
+Estonia_EE
+Ethiopia_ET
+Falkland Islands (Malvinas)_FK
+Faroe Islands_FO
+Fiji_FJ
+Finland_FI
+France_FR
+French Guiana_GF
+French Polynesia_PF
+French Southern Territories_TF
+Gabon_GA
+Gambia_GM
+Georgia_GE
+Germany_DE
+Ghana_GH
+Gibraltar_GI
+Greece_GR
+Greenland_GL
+Grenada_GD
+Guadeloupe_GP
+Guam_GU
+Guatemala_GT
+Guernsey_GG
+Guinea-Bissau_GW
+Guinea_GN
+Guyana_GY
+Haiti_HT
+Heard and Mcdonald Islands_HM
+Holy See (Vatican City State)_VA
+Honduras_HN
+Hong Kong, SAR China_HK
+Hungary_HU
+Iceland_IS
+India_IN
+Indonesia_ID
+Iran, Islamic Republic of_IR
+Iraq_IQ
+Ireland_IE
+Isle of Man_IM
+Israel_IL
+Italy_IT
+Jamaica_JM
+Japan_JP
+Jersey_JE
+Jordan_JO
+Kazakhstan_KZ
+Kenya_KE
+Kiribati_KI
+Korea (North)_KP
+Korea (South)_KR
+Kuwait_KW
+Kyrgyzstan_KG
+Lao PDR_LA
+Latvia_LV
+Lebanon_LB
+Lesotho_LS
+Liberia_LR
+Libya_LY
+Liechtenstein_LI
+Lithuania_LT
+Luxembourg_LU
+Macao, SAR China_MO
+Macedonia, Republic of_MK
+Madagascar_MG
+Malawi_MW
+Malaysia_MY
+Maldives_MV
+Mali_ML
+Malta_MT
+Marshall Islands_MH
+Martinique_MQ
+Mauritania_MR
+Mauritius_MU
+Mayotte_YT
+Mexico_MX
+Micronesia, Federated States of_FM
+Moldova_MD
+Monaco_MC
+Mongolia_MN
+Montenegro_ME
+Montserrat_MS
+Morocco_MA
+Mozambique_MZ
+Myanmar_MM
+Namibia_NA
+Nauru_NR
+Nepal_NP
+Netherlands Antilles_AN
+Netherlands_NL
+New Caledonia_NC
+New Zealand_NZ
+Nicaragua_NI
+Niger_NE
+Nigeria_NG
+Niue_NU
+Norfolk Island_NF
+Northern Mariana Islands_MP
+Norway_NO
+Oman_OM
+Pakistan_PK
+Palau_PW
+Palestinian Territory_PS
+Panama_PA
+Papua New Guinea_PG
+Paraguay_PY
+Peru_PE
+Philippines_PH
+Pitcairn_PN
+Poland_PL
+Portugal_PT
+Puerto Rico_PR
+Qatar_QA
+Republic of Kosovo_XK
+Romania_RO
+Russian Federation_RU
+Rwanda_RW
+Réunion_RE
+Saint Helena_SH
+Saint Kitts and Nevis_KN
+Saint Lucia_LC
+Saint Pierre and Miquelon_PM
+Saint Vincent and Grenadines_VC
+Saint-Barthélemy_BL
+Saint-Martin (French part)_MF
+Samoa_WS
+San Marino_SM
+Sao Tome and Principe_ST
+Saudi Arabia_SA
+Senegal_SN
+Serbia_RS
+Seychelles_SC
+Sierra Leone_SL
+Singapore_SG
+Slovakia_SK
+Slovenia_SI
+Solomon Islands_SB
+Somalia_SO
+South Africa_ZA
+South Georgia and the South Sandwich Islands_GS
+South Sudan_SS
+Spain_ES
+Sri Lanka_LK
+Sudan_SD
+Suriname_SR
+Svalbard and Jan Mayen Islands_SJ
+Swaziland_SZ
+Sweden_SE
+Switzerland_CH
+Syrian Arab Republic (Syria)_SY
+Taiwan, Republic of China_TW
+Tajikistan_TJ
+Tanzania, United Republic of_TZ
+Thailand_TH
+Timor-Leste_TL
+Togo_TG
+Tokelau_TK
+Tonga_TO
+Trinidad and Tobago_TT
+Tunisia_TN
+Turkey_TR
+Turkmenistan_TM
+Turks and Caicos Islands_TC
+Tuvalu_TV
+US Minor Outlying Islands_UM
+Uganda_UG
+Ukraine_UA
+United Arab Emirates_AE
+United Kingdom_GB
+United States of America_US
+Uruguay_UY
+Uzbekistan_UZ
+Vanuatu_VU
+Venezuela (Bolivarian Republic)_VE
+Viet Nam_VN
+Virgin Islands, US_VI
+Wallis and Futuna Islands_WF
+Western Sahara_EH
+Yemen_YE
+Zambia_ZM
+Zimbabwe_Z

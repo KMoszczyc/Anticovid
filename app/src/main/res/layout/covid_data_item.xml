@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vCard"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardElevation="6dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true"
+    android:clipToPadding="false" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="14dp">
+
+        <LinearLayout
+            android:orientation="vertical" android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingBottom="12dp"
+            android:clipToPadding="false">
+
+
+            <TextView
+                android:id="@+id/case_type_label_tv"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/infected"
+                android:textSize="12sp"/>
+
+            <!-- new cases-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingStart="8dp">
+
+                <TextView
+                    android:id="@+id/new_cases_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorTextBlack"
+                    />
+                <TextView
+                    android:id="@+id/today_label_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="today"
+                    android:textSize="10sp"
+                    android:paddingStart="12dp"/>
+            </LinearLayout>
+
+            <!-- avg cases-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingStart="8dp"
+                android:id="@+id/avg_cases_layout">
+
+                <TextView
+                    android:id="@+id/avg_cases_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorTextBlack"
+                    />
+                <TextView
+                    android:id="@+id/avg_label_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7-days avg"
+                    android:textSize="10sp"
+                    android:paddingStart="12dp"/>
+            </LinearLayout>
+
+            <!-- total cases-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingStart="8dp">
+
+                <TextView
+                    android:id="@+id/total_cases_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorTextBlack"
+                    />
+                <TextView
+                    android:id="@+id/total_label_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="total"
+                    android:textSize="10sp"
+                    android:paddingStart="12dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorMainThemeBlue"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+
