@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:padding="16dp">
 
     <include layout="@layout/current_state_card"/>
 
@@ -25,20 +24,33 @@
             android:layout_height="wrap_content"
             android:text="@string/covid_19_daily_report"
             android:textColor="@color/colorTextBlack"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:paddingTop="8dp"
             android:paddingStart="8dp"/>
     </LinearLayout>
 
 
-    <Spinner
+    <androidx.cardview.widget.CardView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/vCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/countries_spinner"
-        android:popupBackground="@android:drawable/dialog_holo_light_frame"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"/>
+        android:clipChildren="false"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardElevation="6dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        android:clipToPadding="false" >
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/countries_spinner"
+            android:popupBackground="@android:drawable/dialog_holo_light_frame"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
+    </androidx.cardview.widget.CardView>
 
     <GridView
         android:id="@+id/covid_gridView"
@@ -46,9 +58,8 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:horizontalSpacing="12dp"
-        android:verticalSpacing="12dp"
-        android:clipToPadding="false"/>
+        android:clipToPadding="false"
+        android:layout_marginTop="8dp"/>
 
 
     <Button
