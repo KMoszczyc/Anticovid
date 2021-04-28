@@ -1,10 +1,13 @@
 package com.example.anticovid.utils
 
 import android.content.Context
-import java.io.BufferedReader
-import java.io.File
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.util.DisplayMetrics
 import java.io.InputStream
-import java.io.InputStreamReader
+
 
 fun readTextFile(context: Context, path: String): MutableList<String> {
     val inputStream: InputStream = context.assets.open(path)
@@ -30,4 +33,28 @@ fun readCountries(context: Context): Pair<MutableList<String>, MutableList<Strin
     codes.forEach{println(">  " + it)}
 
     return Pair(countries, codes)
+}
+
+fun loadImages(context: Context): Pair<MutableList<Drawable>, MutableList<String>> {
+    val img_path = "flags"
+    val opts: BitmapFactory.Options = BitmapFactory.Options()
+    opts.inDensity = DisplayMetrics.DENSITY_HIGH
+
+    val images: Array<String> = context.getAssets().list(img_path) as Array<String>
+    val drawables = mutableListOf<Drawable>()
+    val countryCodes = mutableListOf<String>()
+
+    for (image_name in images) {
+        val inputstream: InputStream = context.getAssets().open("flags/" + image_name)
+        val b = BitmapFactory.decodeStream(inputstream)
+        b.density = Bitmap.DENSITY_NONE
+        val drawable: Drawable = BitmapDrawable(b)
+
+        drawables.add(drawable)
+        val countryCode = image_name.split(".")[0].toUpperCase()
+        countryCodes.add(countryCode)
+        println(countryCode)
+    }
+
+    return Pair(drawables, countryCodes)
 }

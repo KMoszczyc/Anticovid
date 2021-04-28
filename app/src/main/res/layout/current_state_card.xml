@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="Hello Kuba"
                 android:textStyle="bold"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textColor="@color/colorTextBlack"/>
 
             <TextView

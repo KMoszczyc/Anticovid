@@ -1,20 +1,17 @@
 package com.example.anticovid.ui.main
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import com.example.anticovid.R
 import com.example.anticovid.ui.login.LoginActivity
-import com.example.anticovid.utils.readCountries
-import com.example.anticovid.utils.readTextFile
+import com.example.anticovid.utils.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -24,8 +21,10 @@ class MainFragment : Fragment() {
     val apiManager = ApiManager()
     var currentCountry = "Poland"
     var currentCountryCode = "PL"
+    lateinit var flagsDrawables : MutableList<Drawable>
+    lateinit var flagsCountryCodes : MutableList<String>
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
@@ -37,7 +36,6 @@ class MainFragment : Fragment() {
         val gridAdapter = GridAdapter(context!!, null)
         covid_gridView.adapter = gridAdapter
         setupCovidDataGridView()
-
 
         sign_out.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -57,10 +55,13 @@ class MainFragment : Fragment() {
     }
 
     fun setupCountriesSpinner(){
-        val (countries, country_codes) = readCountries(context!!)
-        val adapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, countries)
+        var pair = loadImages(context!!)
+        flagsDrawables = pair.first
+        flagsCountryCodes = pair.second
 
-        println("countries $countries")
+        val (countries, countryCodes) = readCountries(context!!)
+//        val adapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, countries)
+        val adapter = SpinnerAdapter(context!!, countries.toTypedArray(), countryCodes, flagsCountryCodes, flagsDrawables)
         countries_spinner.adapter = adapter
 
         val index = countries.indexOf(currentCountry)
@@ -70,12 +71,11 @@ class MainFragment : Fragment() {
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 currentCountry = countries[position]
-                currentCountryCode = country_codes[position]
+                currentCountryCode = countryCodes[position]
 
                 setupCovidDataGridView()
             }
             override fun onNothingSelected(parent: AdapterView<*>) { }
         }
     }
-
 }
