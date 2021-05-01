@@ -22,18 +22,18 @@ class SignInFragment : Fragment() {
         (activity as? LoginActivity)?.let {
             ViewModelProvider(it).get(LoginViewModel::class.java).apply {
 
-                loginFormState.observe(viewLifecycleOwner, Observer { loginState ->
-                    if (loginState == null)
+                loginFormState.observe(viewLifecycleOwner, Observer { loginFormState ->
+                    if (loginFormState == null)
                         return@Observer
 
                     // disable signIn button unless username and password are valid
-                    sign_in.isEnabled = loginState.isDataValid
+                    sign_in.isEnabled = loginFormState.isDataValid
 
                     // display errors
-                    if (loginState.emailError != null)
-                        email.error = context?.getString(loginState.emailError)
-                    if (loginState.passwordError != null)
-                        password.error = context?.getString(loginState.passwordError)
+                    if (loginFormState.emailError != null)
+                        email.error = context?.getString(loginFormState.emailError)
+                    if (loginFormState.passwordError != null)
+                        password.error = context?.getString(loginFormState.passwordError)
                 })
 
                 loginResult.observe(viewLifecycleOwner, Observer { loginResult ->
@@ -60,17 +60,12 @@ class SignInFragment : Fragment() {
                     }
                 })
 
-                // helper method
-                fun loginDataChanged() {
+                email.afterTextChanged {
                     loginDataChanged(email.text.toString(), password.text.toString())
                 }
 
-                email.afterTextChanged {
-                    loginDataChanged()
-                }
-
                 password.afterTextChanged {
-                    loginDataChanged()
+                    loginDataChanged(email.text.toString(), password.text.toString())
                 }
 
                 sign_in.setOnClickListener {
@@ -78,7 +73,7 @@ class SignInFragment : Fragment() {
                 }
 
                 sign_up.setOnClickListener {
-                    loginFormChanged(LoginForm.SignUp)
+                    loginFormChanged(LoginFormEnum.SignUp)
                 }
             }
         }
