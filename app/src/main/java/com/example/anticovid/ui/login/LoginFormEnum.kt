@@ -1,5 +1,5 @@
 package com.example.anticovid.ui.login
 
-enum class LoginForm {
+enum class LoginFormEnum {
     SignIn, SignUp
 }

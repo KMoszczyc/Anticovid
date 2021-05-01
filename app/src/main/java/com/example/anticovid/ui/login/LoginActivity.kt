@@ -6,7 +6,6 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -21,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var loginViewModel: LoginViewModel
+    private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,16 +29,20 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory()).get(LoginViewModel::class.java)
 
-        loginViewModel.loginForm.observe(this, Observer { loginForm ->
-            if (loginForm == null)
+        loginViewModel.loginFormEnum.observe(this, Observer { loginFormEnum ->
+            if (loginFormEnum == null)
                 return@Observer
 
-            // attach new fragment
-            when (loginForm) {
-                LoginForm.SignIn ->
-                    attachFragment(supportFragmentManager.findFragmentByTag("SignInFragment") ?: SignInFragment(), "SignInFragment")
-                LoginForm.SignUp ->
-                    attachFragment(supportFragmentManager.findFragmentByTag("SignUpFragment") ?: SignUpFragment(), "SignUpFragment")
+            // attach fragment
+            when (loginFormEnum) {
+                LoginFormEnum.SignIn ->
+                    attachFragment(
+                        supportFragmentManager.findFragmentByTag("SignInFragment") ?: SignInFragment(),
+                        "SignInFragment")
+                LoginFormEnum.SignUp ->
+                    attachFragment(
+                        supportFragmentManager.findFragmentByTag("SignUpFragment") ?: SignUpFragment(),
+                        "SignUpFragment")
             }
         })
 

@@ -1,4 +1,4 @@
-package com.example.anticovid.data
+package com.example.anticovid.data.repository
 
 import com.example.anticovid.data.model.LoggedInUser
 import com.example.anticovid.data.model.Result
@@ -9,23 +9,20 @@ import com.google.firebase.auth.FirebaseAuth
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository {
+class LoginRepository(private var loginCallbackListener: LoginCallbackListener? = null) {
 
-    var loginCallbackListener: LoginCallbackListener? = null
+    private val mAuth = FirebaseAuth.getInstance()
 
     var user: LoggedInUser? = null
         private set
-
-    val isLoggedIn: Boolean
-        get() = user != null
-
-    private val mAuth = FirebaseAuth.getInstance()
 
     init {
         mAuth.currentUser?.let {
             user = LoggedInUser(it.uid, it.displayName ?: "")
         }
     }
+
+    fun isUserSignedIn(): Boolean = user != null
 
     fun signOut() {
         user = null
@@ -66,6 +63,6 @@ class LoginRepository {
     }
 
     interface LoginCallbackListener {
-        fun onLoginResult(result: Result<LoggedInUser>)
+        fun onLoginResult(result: Result)
     }
 }

@@ -12,8 +12,6 @@ import com.google.firebase.auth.FirebaseAuth
 
 class StartupActivity : AppCompatActivity() {
 
-    private val mAuth = FirebaseAuth.getInstance()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_startup)
@@ -22,7 +20,7 @@ class StartupActivity : AppCompatActivity() {
         // Handler used to take action after displaying UI
         Handler(Looper.getMainLooper()).postDelayed({
             // check if user is signed in and open appropriate activity
-            if (mAuth.currentUser != null) {
+            if (FirebaseAuth.getInstance().currentUser != null) {
                 // Open MainActivity
                 startActivity(Intent(applicationContext, MainActivity::class.java))
             }

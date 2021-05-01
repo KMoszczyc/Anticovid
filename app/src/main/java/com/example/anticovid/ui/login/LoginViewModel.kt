@@ -5,14 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.anticovid.R
-import com.example.anticovid.data.LoginRepository
+import com.example.anticovid.data.repository.LoginRepository
 import com.example.anticovid.data.model.LoggedInUser
 import com.example.anticovid.data.model.Result
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel(), LoginRepository.LoginCallbackListener {
+class LoginViewModel : ViewModel(), LoginRepository.LoginCallbackListener {
 
-    private val _loginForm = MutableLiveData<LoginForm>()
-    val loginForm: LiveData<LoginForm> = _loginForm
+    private val loginRepository = LoginRepository(this)
+
+    private val _loginFormEnum = MutableLiveData<LoginFormEnum>()
+    val loginFormEnum: LiveData<LoginFormEnum> = _loginFormEnum
 
     private val _loginFormState = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginFormState
@@ -27,11 +29,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     val isKeyboardVisible: LiveData<Boolean> = _isKeyboardVisible
 
     init {
-        loginRepository.loginCallbackListener = this
-        _isKeyboardVisible.value = false
-
         // Set SignInFragment as default
-        _loginForm.value = LoginForm.SignIn
+        _loginFormEnum.value = LoginFormEnum.SignIn
+        _isKeyboardVisible.value = false
     }
 
     fun signIn(email: String, password: String) {
@@ -44,12 +44,12 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         loginRepository.signUp(email, password)
     }
 
-    override fun onLoginResult(result: Result<LoggedInUser>) {
+    override fun onLoginResult(result: Result) {
         _isLoading.value = false
 
         when {
-            (result is Result.Success) ->
-                _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+            (result is Result.Success<*>) ->
+                _loginResult.value = LoginResult(success = LoggedInUserView(displayName = (result.data as? LoggedInUser)?.displayName ?: "user"))
             (result is Result.Error) ->
                 _loginResult.value = LoginResult(error = result.errorMessage)
         }
@@ -66,9 +66,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             _loginFormState.value = LoginFormState(isDataValid = true)
     }
 
-    fun loginFormChanged(loginForm: LoginForm) {
+    fun loginFormChanged(loginFormEnum: LoginFormEnum) {
         resetLoginStatus()
-        _loginForm.value = loginForm
+        _loginFormEnum.value = loginFormEnum
     }
 
     private fun resetLoginStatus() {

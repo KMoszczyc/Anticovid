@@ -1,8 +1,5 @@
 package com.example.anticovid.ui.main
 
-
-//import com.example.anticovid.R
-
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -11,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.example.anticovid.R
 import kotlinx.android.synthetic.main.spinner_item.view.*
-
 
 class SpinnerAdapter(
     private val ctx: Context,
@@ -29,13 +25,14 @@ class SpinnerAdapter(
         return getCustomView(position, convertView, parent)
     }
 
-    fun getCustomView(position: Int, convertView: View?, parent: ViewGroup?): View {
+    private fun getCustomView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val inflater = ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val spinnerItem: View = inflater.inflate(R.layout.spinner_item, parent, false)
         val flagIndex = flagsCountryCodes.indexOf(countryCodes[position])
 
         spinnerItem.spinner_tv.text = contentArray[position]
         spinnerItem.spinner_image.setImageDrawable(imageArray[flagIndex])
+
         return spinnerItem
     }
 }

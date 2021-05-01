@@ -22,20 +22,20 @@ class SignUpFragment : Fragment() {
         (activity as? LoginActivity)?.let {
             ViewModelProvider(it).get(LoginViewModel::class.java).apply {
 
-                loginFormState.observe(viewLifecycleOwner, Observer { loginState ->
-                    if (loginState == null)
+                loginFormState.observe(viewLifecycleOwner, Observer { loginFormState ->
+                    if (loginFormState == null)
                         return@Observer
 
                     // disable signUp button unless username, password and repeatedPassword are valid
-                    sign_up.isEnabled = loginState.isDataValid
+                    sign_up.isEnabled = loginFormState.isDataValid
 
                     // display errors
-                    if (loginState.emailError != null)
-                        email.error = context?.getString(loginState.emailError)
-                    if (loginState.passwordError != null)
-                        password.error = context?.getString(loginState.passwordError)
-                    if (loginState.repeatedPasswordError != null)
-                        repeated_password.error = context?.getString(loginState.repeatedPasswordError)
+                    if (loginFormState.emailError != null)
+                        email.error = context?.getString(loginFormState.emailError)
+                    if (loginFormState.passwordError != null)
+                        password.error = context?.getString(loginFormState.passwordError)
+                    if (loginFormState.repeatedPasswordError != null)
+                        repeated_password.error = context?.getString(loginFormState.repeatedPasswordError)
                 })
 
                 loginResult.observe(viewLifecycleOwner, Observer { loginResult ->
@@ -62,21 +62,16 @@ class SignUpFragment : Fragment() {
                     }
                 })
 
-                // helper method
-                fun loginDataChanged() {
+                email.afterTextChanged {
                     loginDataChanged(email.text.toString(), password.text.toString(), repeated_password.text.toString())
                 }
 
-                email.afterTextChanged {
-                    loginDataChanged()
-                }
-
                 password.afterTextChanged {
-                    loginDataChanged()
+                    loginDataChanged(email.text.toString(), password.text.toString(), repeated_password.text.toString())
                 }
 
                 repeated_password.afterTextChanged {
-                    loginDataChanged()
+                    loginDataChanged(email.text.toString(), password.text.toString(), repeated_password.text.toString())
                 }
 
                 sign_up.setOnClickListener {
@@ -84,7 +79,7 @@ class SignUpFragment : Fragment() {
                 }
 
                 sign_in.setOnClickListener {
-                    loginFormChanged(LoginForm.SignIn)
+                    loginFormChanged(LoginFormEnum.SignIn)
                 }
             }
         }
