@@ -18,14 +18,12 @@ class ApiRepository {
 
         if (responseString != "") {
             Log.d("Covid data","ApiRepository.fetchCovidData(): response: $responseString")
-
             val countryProvinceDataHistory = gson.fromJson(responseString, Array<CountryRawDataModel>::class.java).toList()
             countryDataHistory = aggregateCountryProvinceData(countryProvinceDataHistory)
             currentCountry = createLiveCountryModel()
         }
         else {
             Log.d("Covid data","ApiRepository.fetchCovidData(): Covid-19 api is not responding! :(")
-
             return null
         }
 
@@ -67,7 +65,6 @@ class ApiRepository {
                     }
                 }
             }
-
         httpAsync.join()
 
         return responseString

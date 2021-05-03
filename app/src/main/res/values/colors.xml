@@ -10,5 +10,5 @@
     <color name="colorBackgroundDisabled">#939393</color>
     <color name="colorMainThemeBlue">#4DABF5</color>
     <color name="colorStateGreen">#4CAF50</color>
-
+    <color name="colorBlackBorder">#000000</color>
 </resources>

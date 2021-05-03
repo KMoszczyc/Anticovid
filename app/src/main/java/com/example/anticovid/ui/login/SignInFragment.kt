@@ -20,9 +20,9 @@ class SignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as? LoginActivity)?.let {
-            ViewModelProvider(it).get(LoginViewModel::class.java).apply {
+            ViewModelProvider(it).get(LoginViewModel::class.java).let { lvm ->
 
-                loginFormState.observe(viewLifecycleOwner, Observer { loginFormState ->
+                lvm.loginFormState.observe(viewLifecycleOwner, Observer { loginFormState ->
                     if (loginFormState == null)
                         return@Observer
 
@@ -36,7 +36,7 @@ class SignInFragment : Fragment() {
                         password.error = context?.getString(loginFormState.passwordError)
                 })
 
-                loginResult.observe(viewLifecycleOwner, Observer { loginResult ->
+                lvm.loginResult.observe(viewLifecycleOwner, Observer { loginResult ->
                     if (loginResult == null)
                         return@Observer
 
@@ -45,7 +45,7 @@ class SignInFragment : Fragment() {
                         error_message.text = loginResult.error
                 })
 
-                isKeyboardVisible.observe(viewLifecycleOwner, Observer { isKeyboardVisible ->
+                lvm.isKeyboardVisible.observe(viewLifecycleOwner, Observer { isKeyboardVisible ->
                     if (isKeyboardVisible == null)
                         return@Observer
 
@@ -61,19 +61,19 @@ class SignInFragment : Fragment() {
                 })
 
                 email.afterTextChanged {
-                    loginDataChanged(email.text.toString(), password.text.toString())
+                    lvm.loginDataChanged(email.text.toString(), password.text.toString())
                 }
 
                 password.afterTextChanged {
-                    loginDataChanged(email.text.toString(), password.text.toString())
+                    lvm.loginDataChanged(email.text.toString(), password.text.toString())
                 }
 
                 sign_in.setOnClickListener {
-                    signIn(email.text.toString(), password.text.toString())
+                    lvm.signIn(email.text.toString(), password.text.toString())
                 }
 
                 sign_up.setOnClickListener {
-                    loginFormChanged(LoginFormEnum.SignUp)
+                    lvm.loginFormChanged(LoginFormEnum.SignUp)
                 }
             }
         }

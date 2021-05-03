@@ -9,7 +9,7 @@ import android.util.DisplayMetrics
 import java.io.InputStream
 
 
-fun readTextFile(context: Context, path: String): MutableList<String> {
+fun readTxtFile(context: Context, path: String): MutableList<String> {
     val inputStream: InputStream = context.assets.open(path)
     val lineList = mutableListOf<String>()
 
