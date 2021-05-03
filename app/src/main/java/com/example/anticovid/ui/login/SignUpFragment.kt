@@ -20,9 +20,9 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as? LoginActivity)?.let {
-            ViewModelProvider(it).get(LoginViewModel::class.java).apply {
+            ViewModelProvider(it).get(LoginViewModel::class.java).let { lvm ->
 
-                loginFormState.observe(viewLifecycleOwner, Observer { loginFormState ->
+                lvm.loginFormState.observe(viewLifecycleOwner, Observer { loginFormState ->
                     if (loginFormState == null)
                         return@Observer
 
@@ -38,7 +38,7 @@ class SignUpFragment : Fragment() {
                         repeated_password.error = context?.getString(loginFormState.repeatedPasswordError)
                 })
 
-                loginResult.observe(viewLifecycleOwner, Observer { loginResult ->
+                lvm.loginResult.observe(viewLifecycleOwner, Observer { loginResult ->
                     if (loginResult == null)
                         return@Observer
 
@@ -47,7 +47,7 @@ class SignUpFragment : Fragment() {
                         error_message.text = loginResult.error
                 })
 
-                isKeyboardVisible.observe(viewLifecycleOwner, Observer { isKeyboardVisible ->
+                lvm.isKeyboardVisible.observe(viewLifecycleOwner, Observer { isKeyboardVisible ->
                     if (isKeyboardVisible == null)
                         return@Observer
 
@@ -63,23 +63,23 @@ class SignUpFragment : Fragment() {
                 })
 
                 email.afterTextChanged {
-                    loginDataChanged(email.text.toString(), password.text.toString(), repeated_password.text.toString())
+                    lvm.loginDataChanged(email.text.toString(), password.text.toString(), repeated_password.text.toString())
                 }
 
                 password.afterTextChanged {
-                    loginDataChanged(email.text.toString(), password.text.toString(), repeated_password.text.toString())
+                    lvm.loginDataChanged(email.text.toString(), password.text.toString(), repeated_password.text.toString())
                 }
 
                 repeated_password.afterTextChanged {
-                    loginDataChanged(email.text.toString(), password.text.toString(), repeated_password.text.toString())
+                    lvm.loginDataChanged(email.text.toString(), password.text.toString(), repeated_password.text.toString())
                 }
 
                 sign_up.setOnClickListener {
-                    signUp(email.text.toString(), password.text.toString())
+                    lvm.signUp(email.text.toString(), password.text.toString())
                 }
 
                 sign_in.setOnClickListener {
-                    loginFormChanged(LoginFormEnum.SignIn)
+                    lvm.loginFormChanged(LoginFormEnum.SignIn)
                 }
             }
         }
