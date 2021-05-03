@@ -19,15 +19,12 @@ class StartupActivity : AppCompatActivity() {
 
         // Handler used to take action after displaying UI
         Handler(Looper.getMainLooper()).postDelayed({
-            // check if user is signed in and open appropriate activity
-            if (FirebaseAuth.getInstance().currentUser != null) {
-                // Open MainActivity
+            // check if user is signed in and open proper activity
+            if (FirebaseAuth.getInstance().currentUser != null)
                 startActivity(Intent(applicationContext, MainActivity::class.java))
-            }
-            else {
-                // Open LoginActivity
+            else
                 startActivity(Intent(applicationContext, LoginActivity::class.java))
-            }
+
             finish()
         },2000)
     }

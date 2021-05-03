@@ -76,9 +76,4 @@
             android:numColumns="2" />
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/sign_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="sign out" />
 </LinearLayout>

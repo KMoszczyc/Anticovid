@@ -1,21 +1,22 @@
 package com.example.anticovid.ui.main
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.anticovid.data.repository.ApiRepository
 import com.example.anticovid.data.model.CountryLiveDataModel
+import com.example.anticovid.data.repository.SettingsRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(context: Context?) : ViewModel() {
 
     private val apiRepository = ApiRepository()
 
-    var currentCountry = "Poland"
+    var currentCountry: String
         private set
-    var currentCountryCode = "PL"
+    var currentCountryCode: String
         private set
 
     private var _countryDataModel = MutableLiveData<CountryLiveDataModel>()
@@ -23,6 +24,13 @@ class HomeViewModel : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    init {
+        SettingsRepository.loadSettingsData(context).let {
+            currentCountry = it.defaultCountry
+            currentCountryCode = it.defaultCountryCode
+        }
+    }
 
     fun onCountrySelected(country: String, countryCode: String) {
         _isLoading.value = true

@@ -10,4 +10,9 @@
         android:enabled="true"
         android:icon="@drawable/ic_round_map_24"
         android:title="@string/map"/>
+    <item
+        android:id="@+id/settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_settings_24"
+        android:title="@string/settings"/>
 </menu>

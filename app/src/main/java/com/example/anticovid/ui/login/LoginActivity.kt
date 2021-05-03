@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -36,14 +37,12 @@ class LoginActivity : AppCompatActivity() {
             // attach fragment
             when (loginFormEnum) {
                 LoginFormEnum.SignIn ->
-                    attachFragment(
-                        supportFragmentManager.findFragmentByTag("SignInFragment") ?: SignInFragment(),
-                        "SignInFragment")
+                    attachFragment(SignInFragment())
                 LoginFormEnum.SignUp ->
-                    attachFragment(
-                        supportFragmentManager.findFragmentByTag("SignUpFragment") ?: SignUpFragment(),
-                        "SignUpFragment")
+                    attachFragment(SignUpFragment())
             }
+
+            Log.d("MyDebug", "fragments: ${supportFragmentManager.fragments.size}")
         })
 
         loginViewModel.loginResult.observe(this, Observer { loginResult ->
@@ -97,8 +96,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun attachFragment(fragment: Fragment, tag: String) {
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, tag).commit()
+    private fun attachFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
 
     private fun clearFocus() {
