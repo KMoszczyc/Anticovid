@@ -14,7 +14,7 @@ fun readTxtFile(context: Context, path: String): MutableList<String> {
     val lineList = mutableListOf<String>()
 
     inputStream.bufferedReader().forEachLine { lineList.add(it) }
-    lineList.forEach{println(">  " + it)}
+//    lineList.forEach{println(">  " + it)}
     return lineList
 }
 
@@ -29,8 +29,8 @@ fun readCountries(context: Context): Pair<MutableList<String>, MutableList<Strin
         codes.add(linesplit[1])
     }
 
-    countries.forEach{println(">  " + it)}
-    codes.forEach{println(">  " + it)}
+//    countries.forEach{println(">  " + it)}
+//    codes.forEach{println(">  " + it)}
 
     return Pair(countries, codes)
 }
@@ -53,7 +53,7 @@ fun loadImages(context: Context): Pair<MutableList<Drawable>, MutableList<String
         drawables.add(drawable)
         val countryCode = image_name.split(".")[0].toUpperCase()
         countryCodes.add(countryCode)
-        println(countryCode)
+//        println(countryCode)
     }
 
     return Pair(drawables, countryCodes)
