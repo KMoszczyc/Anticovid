@@ -1,5 +1,7 @@
 package com.example.anticovid.ui.main
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +11,12 @@ import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.anticovid.R
+import com.example.anticovid.data.model.DEFAULT_USERNAME
+import com.example.anticovid.data.model.SHARED_PREFERENCES_MY_DATA
+import com.example.anticovid.data.model.SHARED_PREFERENCES_MY_DATA_USERNAME
+import com.example.anticovid.data.model.SHARED_PREFERENCES_SETTINGS
 import com.example.anticovid.utils.*
+import kotlinx.android.synthetic.main.current_state_card.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -46,6 +53,22 @@ class HomeFragment : Fragment() {
         })
 
         setupCountriesSpinner(homeViewModel.currentCountry)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        context!!.getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE)?.let {
+            updateGreetingsText(it)
+            it.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
+                if (key == SHARED_PREFERENCES_MY_DATA_USERNAME)
+                    updateGreetingsText(sharedPreferences)
+            }
+        }
+    }
+
+    private fun updateGreetingsText(sharedPref: SharedPreferences) {
+        greeting_tv.text = "${getString(R.string.hello)} ${sharedPref.getString(SHARED_PREFERENCES_MY_DATA_USERNAME, DEFAULT_USERNAME)}"
     }
 
     private fun setupCountriesSpinner(defaultCountry: String) {

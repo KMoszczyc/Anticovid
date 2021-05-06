@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.anticovid.data.model.*
 import com.example.anticovid.data.repository.ApiRepository
-import com.example.anticovid.data.model.CountryLiveDataModel
-import com.example.anticovid.data.repository.SettingsRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -14,9 +13,9 @@ class HomeViewModel(context: Context?) : ViewModel() {
 
     private val apiRepository = ApiRepository()
 
-    var currentCountry: String
+    lateinit var currentCountry: String
         private set
-    var currentCountryCode: String
+    lateinit var currentCountryCode: String
         private set
 
     private var _countryDataModel = MutableLiveData<CountryLiveDataModel>()
@@ -26,9 +25,9 @@ class HomeViewModel(context: Context?) : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     init {
-        SettingsRepository.loadSettingsData(context).let {
-            currentCountry = it.defaultCountry
-            currentCountryCode = it.defaultCountryCode
+        context!!.getSharedPreferences(SHARED_PREFERENCES_SETTINGS,Context.MODE_PRIVATE)?.let {
+            currentCountry = it.getString(SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY, DEFAULT_COUNTRY) ?: DEFAULT_COUNTRY
+            currentCountryCode = it.getString(SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY_CODE, DEFAULT_COUNTRY_CODE) ?: DEFAULT_COUNTRY_CODE
         }
     }
 

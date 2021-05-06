@@ -19,37 +19,39 @@
         <View
             android:layout_width="6dp"
             android:layout_height="match_parent"
-            android:background="@color/colorStateGreen"/>
+            android:background="@color/colorStateGreen" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
+
             <TextView
                 android:id="@+id/greeting_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hello Kuba"
-                android:textStyle="bold"
+                android:text="@string/hello"
+                android:textColor="@color/colorTextBlack"
                 android:textSize="20sp"
-                android:textColor="@color/colorTextBlack"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/your_current_state_label_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your current state:"
-                android:textSize="18sp"
-                android:paddingTop="8dp"/>
+                android:paddingTop="8dp"
+                android:text="@string/your_current_state"
+                android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/current_state_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Low risk of infection"
+                android:text="@string/low_risk_of_infection"
                 android:textColor="@color/colorTextBlack"
-                android:textStyle="bold"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 

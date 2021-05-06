@@ -11,4 +11,5 @@
     <color name="colorMainThemeBlue">#4DABF5</color>
     <color name="colorStateGreen">#4CAF50</color>
     <color name="colorBlackBorder">#000000</color>
+    <color name="colorBlack">#000000</color>
 </resources>
