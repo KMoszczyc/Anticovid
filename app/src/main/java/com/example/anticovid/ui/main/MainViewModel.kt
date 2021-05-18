@@ -16,12 +16,10 @@ class MainViewModel : ViewModel() {
     val isUserSignedIn: LiveData<Boolean> = _isUserSignedIn
 
     init {
-        //Set HomeFragment as default
-        _mainFragmentEnum.value = MainFragmentEnum.HomeFragment
         _isUserSignedIn.value = loginRepository.isUserSignedIn()
     }
 
-    fun onFragmentSelected(selectedFragment: MainFragmentEnum) {
+    fun onFragmentSwitch(selectedFragment: MainFragmentEnum) {
         _mainFragmentEnum.value = selectedFragment
     }
 

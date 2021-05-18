@@ -1,51 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".ui.main.SettingsFragment">
+    android:orientation="vertical">
+
+    <include layout="@layout/app_title_bar" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_settings_item"
         android:orientation="vertical"
-        android:padding="6dp">
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:text="@string/default_country"
-            android:textColor="@color/colorTextBlack"
-            android:textSize="18sp" />
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/vCard"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardElevation="6dp"
-            app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true">
-
-            <Spinner
-                android:id="@+id/countries_spinner"
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:popupBackground="@android:drawable/dialog_holo_light_frame" />
-        </androidx.cardview.widget.CardView>
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:text="@string/default_country"
+                android:textColor="@color/colorTextBlack"
+                android:textSize="20sp" />
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/vCard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardElevation="6dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true">
+
+                <Spinner
+                    android:id="@+id/countries_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:popupBackground="@android:drawable/dialog_holo_light_frame" />
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
     </LinearLayout>
 
     <Button
