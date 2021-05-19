@@ -30,6 +30,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.maps.android:android-maps-utils:2.2.3'
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -47,6 +48,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation platform('com.google.firebase:firebase-bom:26.8.0')
+    implementation 'com.google.firebase:firebase-database-ktx'
 }
 
 

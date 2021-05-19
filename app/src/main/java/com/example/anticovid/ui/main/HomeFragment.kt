@@ -3,7 +3,6 @@ package com.example.anticovid.ui.main
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +52,7 @@ class HomeFragment : Fragment() {
         })
 
         setupCountriesSpinner(homeViewModel.currentCountry)
+
     }
 
     override fun onStart() {
