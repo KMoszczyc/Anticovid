@@ -37,4 +37,23 @@
     <string name="hello">Hello</string>
     <string name="your_current_state">Your current state:</string>
     <string name="low_risk_of_infection">Low risk of infection</string>
+    <string name="sign_out">Sign out</string>
+    <string name="my_data_question_1">Are you suffering from any ailment?</string>
+    <string name="my_data_question_1_no">No, I am healthy.</string>
+    <string name="my_data_question_1_yes">Yes, I am chronically ill.</string>
+    <string name="my_data_question_2">What is your blood type?</string>
+    <string-array name="blood_types_array">
+        <item>AB+</item>
+        <item>AB-</item>
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>0+</item>
+        <item>0-</item>
+        <item>I dont know</item>
+    </string-array>
+    <string name="my_data_question_3">Do you smoke cigarettes or other tobacco products?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

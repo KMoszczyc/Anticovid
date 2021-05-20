@@ -8,7 +8,15 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.anticovid.R
+import kotlinx.android.synthetic.main.fragment_sign_in.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
+import kotlinx.android.synthetic.main.fragment_sign_up.email
+import kotlinx.android.synthetic.main.fragment_sign_up.error_message
+import kotlinx.android.synthetic.main.fragment_sign_up.footer
+import kotlinx.android.synthetic.main.fragment_sign_up.header
+import kotlinx.android.synthetic.main.fragment_sign_up.password
+import kotlinx.android.synthetic.main.fragment_sign_up.sign_in
+import kotlinx.android.synthetic.main.fragment_sign_up.sign_up
 
 class SignUpFragment : Fragment() {
 
@@ -55,10 +63,12 @@ class SignUpFragment : Fragment() {
                     if (isKeyboardVisible) {
                         header.visibility = View.GONE
                         footer.visibility = View.GONE
+                        error_message.visibility = View.GONE
                     }
                     else {
                         header.visibility = View.VISIBLE
                         footer.visibility = View.VISIBLE
+                        error_message.visibility = View.VISIBLE
                     }
                 })
 

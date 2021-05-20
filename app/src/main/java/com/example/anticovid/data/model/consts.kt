@@ -10,3 +10,6 @@ const val SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY_CODE = "default_country_co
 
 const val SHARED_PREFERENCES_MY_DATA = "my_data"
 const val SHARED_PREFERENCES_MY_DATA_USERNAME = "my_data_username"
+const val SHARED_PREFERENCES_MY_DATA_QUESTION_1 = "my_data_question_1"
+const val SHARED_PREFERENCES_MY_DATA_QUESTION_2 = "my_data_question_2"
+const val SHARED_PREFERENCES_MY_DATA_QUESTION_3 = "my_data_question_3"

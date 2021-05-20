@@ -47,10 +47,10 @@ class HomeFragment : Fragment() {
             }
         })
 
-        homeViewModel.countryDataModel.observe(viewLifecycleOwner, { countryDataModel ->
+        homeViewModel.countryDataModel.observe(viewLifecycleOwner) { countryDataModel ->
             val gridAdapter = GridAdapter(context!!, countryDataModel)
             covid_gridView.adapter = gridAdapter
-        })
+        }
 
         setupCountriesSpinner(homeViewModel.currentCountry)
     }
