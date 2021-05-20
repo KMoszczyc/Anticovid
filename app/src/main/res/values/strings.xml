@@ -56,4 +56,10 @@
     <string name="my_data_question_3">Do you smoke cigarettes or other tobacco products?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="complete_health_diary_entry">Click and complete your today\'s entry to the health diary</string>
+    <string name="health_diary_entry_completed">Today\'s health diary entry completed</string>
+    <string name="previous_entries">Previous entries:</string>
+    <string name="no_previous_entries">No previous entries</string>
+    <string name="entry_date">Entry date:</string>
+    <string name="save">Save</string>
 </resources>

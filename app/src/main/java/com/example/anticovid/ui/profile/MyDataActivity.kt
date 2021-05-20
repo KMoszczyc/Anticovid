@@ -80,25 +80,33 @@ class MyDataActivity : AppCompatActivity() {
 
     private fun initData() {
         with (sharedPref) {
+            //Username
             getString(SHARED_PREFERENCES_MY_DATA_USERNAME, "")?.let {
                 username = it
                 username_et.setText(it)
             }
 
+            //Q1
             if (getBoolean(SHARED_PREFERENCES_MY_DATA_QUESTION_1, false))
                 question1.check(R.id.question1_yes)
             else
                 question1.check(R.id.question1_no)
 
-            getString(SHARED_PREFERENCES_MY_DATA_QUESTION_2, "")?.let { blood_type ->
-                resources.getStringArray(R.array.blood_types_array).forEachIndexed { index, s ->
-                    if (s == blood_type) {
+            //Q2
+            val bloodTypes = resources.getStringArray(R.array.blood_types_array)
+            val bloodType = getString(SHARED_PREFERENCES_MY_DATA_QUESTION_2, "") ?: ""
+
+            if (bloodType != "")
+                bloodTypes.forEachIndexed { index, type ->
+                    if (type == bloodType) {
                         blood_type_spinner.setSelection(index)
-                        return@let
+                        return@forEachIndexed
                     }
                 }
-            }
+            else
+                blood_type_spinner.setSelection(bloodTypes.lastIndex)
 
+            //Q3
             if (getBoolean(SHARED_PREFERENCES_MY_DATA_QUESTION_3, false))
                 question3.check(R.id.question3_yes)
             else

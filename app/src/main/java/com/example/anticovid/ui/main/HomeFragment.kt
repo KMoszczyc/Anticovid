@@ -3,7 +3,6 @@ package com.example.anticovid.ui.main
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import com.example.anticovid.R
 import com.example.anticovid.data.model.DEFAULT_USERNAME
 import com.example.anticovid.data.model.SHARED_PREFERENCES_MY_DATA
 import com.example.anticovid.data.model.SHARED_PREFERENCES_MY_DATA_USERNAME
-import com.example.anticovid.data.model.SHARED_PREFERENCES_SETTINGS
 import com.example.anticovid.utils.*
 import kotlinx.android.synthetic.main.current_state_card.*
 import kotlinx.android.synthetic.main.fragment_home.*
