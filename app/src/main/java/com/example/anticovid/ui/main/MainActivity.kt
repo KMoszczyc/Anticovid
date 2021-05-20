@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         // default fragment
         switchFragment(MainFragmentEnum.HomeFragment)
+
         requestAllPermissions()
     }
 

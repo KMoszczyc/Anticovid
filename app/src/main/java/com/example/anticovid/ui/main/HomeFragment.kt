@@ -13,7 +13,6 @@ import com.example.anticovid.R
 import com.example.anticovid.data.model.DEFAULT_USERNAME
 import com.example.anticovid.data.model.SHARED_PREFERENCES_MY_DATA
 import com.example.anticovid.data.model.SHARED_PREFERENCES_MY_DATA_USERNAME
-import com.example.anticovid.data.model.SHARED_PREFERENCES_SETTINGS
 import com.example.anticovid.utils.*
 import kotlinx.android.synthetic.main.current_state_card.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -46,10 +45,10 @@ class HomeFragment : Fragment() {
             }
         })
 
-        homeViewModel.countryDataModel.observe(viewLifecycleOwner, { countryDataModel ->
+        homeViewModel.countryDataModel.observe(viewLifecycleOwner) { countryDataModel ->
             val gridAdapter = GridAdapter(context!!, countryDataModel)
             covid_gridView.adapter = gridAdapter
-        })
+        }
 
         setupCountriesSpinner(homeViewModel.currentCountry)
 

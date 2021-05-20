@@ -53,10 +53,12 @@ class SignInFragment : Fragment() {
                     if (isKeyboardVisible) {
                         header.visibility = View.GONE
                         footer.visibility = View.GONE
+                        error_message.visibility = View.GONE
                     }
                     else {
                         header.visibility = View.VISIBLE
                         footer.visibility = View.VISIBLE
+                        error_message.visibility = View.VISIBLE
                     }
                 })
 
