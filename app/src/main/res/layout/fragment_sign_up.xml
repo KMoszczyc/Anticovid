@@ -77,11 +77,11 @@
                 android:layout_marginBottom="5dp"
                 android:background="@color/colorBackgroundWhite"
                 android:hint="@string/email_hint"
+                android:imeOptions="actionNext"
                 android:inputType="textAutoComplete|textEmailAddress"
                 android:selectAllOnFocus="false"
                 android:singleLine="true"
-                android:textColor="@color/colorTextBlack"
-                android:textSize="20sp" />
+                android:textColor="@color/colorTextBlack" android:textSize="20sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -113,11 +113,11 @@
                 android:layout_marginBottom="5dp"
                 android:background="@color/colorBackgroundWhite"
                 android:hint="@string/password_hint"
+                android:imeOptions="actionNext"
                 android:inputType="textPassword"
                 android:selectAllOnFocus="false"
                 android:singleLine="true"
-                android:textColor="@color/colorTextBlack"
-                android:textSize="20sp" />
+                android:textColor="@color/colorTextBlack" android:textSize="20sp"/>
         </LinearLayout>
 
         <LinearLayout

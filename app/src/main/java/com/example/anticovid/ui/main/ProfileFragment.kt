@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.anticovid.R
 import com.example.anticovid.ui.login.LoginActivity
+import com.example.anticovid.ui.profile.HealthDiaryActivity
 import com.example.anticovid.ui.profile.MyDataActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 
@@ -26,7 +27,7 @@ class ProfileFragment : Fragment() {
         }
 
         health_diary.setOnClickListener {
-            Toast.makeText(activity, "Healt Diary", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(activity, HealthDiaryActivity::class.java))
         }
 
         risk_assessment_test.setOnClickListener {

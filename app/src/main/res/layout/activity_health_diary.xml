@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.profile.HealthDiaryActivity">
+
+    <include layout="@layout/app_title_bar_with_back_bt"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/add_new_entry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginStart="24dp" android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp" android:layout_marginBottom="16dp" app:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_border_main_theme"
+            android:gravity="center_horizontal|top"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:srcCompat="@drawable/ic_round_class_24"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical" android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/entry_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_baseline_add_circle_24"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:text="01.01.2021"
+                    android:textColor="@color/colorTextBlack"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/entry_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:padding="6dp"
+                    android:text="@string/complete_health_diary_entry" android:textColor="@color/colorTextBlack"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/previous_entries_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="8dp"
+        android:text="@string/previous_entries"
+        android:textColor="@color/colorTextBlack"
+        android:textSize="20sp" android:textStyle="bold"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/health_diary_entries_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"/>
+
+</LinearLayout>

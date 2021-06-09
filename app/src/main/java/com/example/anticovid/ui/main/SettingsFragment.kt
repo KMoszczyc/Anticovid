@@ -39,7 +39,9 @@ class SettingsFragment : Fragment() {
 
         sharedPref = context!!.getSharedPreferences(SHARED_PREFERENCES_SETTINGS,Context.MODE_PRIVATE)
 
-        setupCountriesSpinner(sharedPref.getString(SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY, DEFAULT_COUNTRY) ?: DEFAULT_COUNTRY)
+        sharedPref.getString(SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY, DEFAULT_COUNTRY)?.let {
+            setupCountriesSpinner(it)
+        }
     }
 
     private fun setupCountriesSpinner(defaultCountry: String) {

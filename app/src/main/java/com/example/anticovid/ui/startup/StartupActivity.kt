@@ -26,6 +26,6 @@ class StartupActivity : AppCompatActivity() {
                 startActivity(Intent(applicationContext, LoginActivity::class.java))
 
             finish()
-        },2000)
+        },1000)
     }
 }
