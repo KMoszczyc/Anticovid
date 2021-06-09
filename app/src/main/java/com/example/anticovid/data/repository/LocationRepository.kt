@@ -3,7 +3,6 @@ package com.example.NavigationForBlind.DeviceData
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Location
 import android.net.ConnectivityManager
 import android.util.Log
@@ -19,8 +18,9 @@ import com.google.android.gms.maps.model.TileOverlay
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.maps.android.heatmaps.Gradient
 import com.google.maps.android.heatmaps.HeatmapTileProvider
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,6 +46,7 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
 
     private lateinit var heatmapProvider: HeatmapTileProvider
     private var heatmapOverlay: TileOverlay? = null
+    private var last_update_time_threshold_seconds = 300
 
     init
     {
@@ -61,19 +62,7 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
 
         database.reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val users = snapshot.children
-                val locations = mutableListOf<LatLng>()
-                for (user in users) {
-                    val userKeySplit = user.key!!.split("-")
-
-                    //  dont add current user circle on map
-                    if (userKeySplit.size <= 1 || (userKeySplit.size > 1 && userId != userKeySplit[1])) {
-                        val location = stringToLatLng(user.child("lastLocation").value.toString())
-                        locations.add(location)
-                    }
-                }
-
-                addHeatMap(locations)
+                updateHeatMap(snapshot)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -81,12 +70,12 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
             }
         })
 
-//        addRandomLocations(100)
+        addRandomLocations(900)
 
         map.setOnCameraChangeListener(object : OnCameraChangeListener {
             private var currentZoom = -1f
             override fun onCameraChange(pos: CameraPosition) {
-                if (pos.zoom != currentZoom && ::heatmapProvider.isInitialized){
+                if (pos.zoom != currentZoom && ::heatmapProvider.isInitialized) {
                     currentZoom = pos.zoom;
                     val radius = getHeatmapRadius(pos.zoom.toDouble())
                     println("radius:  $radius, zoom:  ${pos.zoom}")
@@ -94,6 +83,22 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
                 }
             }
         })
+    }
+
+    fun updateHeatMap(snapshot: DataSnapshot){
+        val users = snapshot.children
+        val locations = mutableListOf<LatLng>()
+        for (user in users) {
+            val userKeySplit = user.key!!.split("-")
+
+            //  dont add current user circle on map, show locations updated in last 5 minutes only
+            if (userKeySplit.size <= 1 || (userKeySplit.size > 1 && userId != userKeySplit[1] && getDateDiffInSeconds(user.child("lastUpdateTime").value.toString())<last_update_time_threshold_seconds)) {
+                val location = stringToLatLng(user.child("lastLocation").value.toString())
+                locations.add(location)
+            }
+        }
+
+        addHeatMap(locations)
     }
 
 
@@ -128,17 +133,10 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
                 locationResult ?: return
                 if (locationResult.locations.isNotEmpty()) {
                     lastLocation = locationResult.lastLocation
-                    Log.wtf("lasyLocation:", lastLocation.toString())
-                    val locationRef = database.getReference(locationsRefPath + getCurrentDateTime())
-                    val locationStr = "${lastLocation.getLatitude()} ${lastLocation.getLongitude()}"
-                    locationRef.setValue(locationStr)
-                    lastLocationRef.setValue(locationStr)
-                    lastUpdateTimeRef.setValue(getCurrentDateTimePretty())
-
-                    println(locationsRefPath + getCurrentDateTime() + ": " + locationStr)
+                    updateDataInFirebase()
 
                     if(!isLocationFound) {
-                        val latLng = LatLng(lastLocation.getLatitude(), lastLocation.getLongitude())
+                        val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
                         map.moveCamera(CameraUpdateFactory.newLatLng(latLng))
                         map.animateCamera(CameraUpdateFactory.zoomTo(ZOOM));
                         isLocationFound = true
@@ -148,6 +146,15 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         }
 
         updateLocation()
+    }
+
+    fun updateDataInFirebase(){
+        Log.wtf("lastLocation:", lastLocation.toString())
+        val locationStr = "${lastLocation.getLatitude()} ${lastLocation.getLongitude()}"
+        lastLocationRef.setValue(locationStr)
+        lastUpdateTimeRef.setValue(getCurrentDateTimePretty())
+
+        println(locationsRefPath + getCurrentDateTime() + ": " + locationStr)
     }
 
     fun startLocationUpdates() {
@@ -189,6 +196,13 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         return Calendar.getInstance().time.toString("yyyy-MM-dd HH:mm:ss")
     }
 
+    fun getDateDiffInSeconds(dateStr: String): Int {
+        val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr)
+        val today = Date()
+        val diff = today.time - date.time
+        val seconds = (diff / 1000).toInt()
+        return seconds
+    }
 
     fun stringToLatLng(location: String): LatLng {
         val splitLocation = location.split(" ")
@@ -197,40 +211,31 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
 
     private fun addHeatMap(locations: MutableList<LatLng>) {
         if(!::heatmapProvider.isInitialized){
-            // Create the gradient.
-//            val colors = intArrayOf(
-//                Color.rgb(102, 225, 0),  // green
-//                Color.rgb(255, 0, 0) // red
-//            )
-//            //  important numbers, especially second one - how many people turn the heatmap red
-//            val startPoints = floatArrayOf(0.1f, 1f)
-//            val gradient = Gradient(colors, startPoints)
-
             heatmapProvider = HeatmapTileProvider.Builder()
                 .data(locations)
                 .opacity(0.7)
-                .radius(50)
-//                .gradient(gradient)
+                .radius(10)
+                .maxIntensity(1.0)
                 .build()
             heatmapOverlay = map.addTileOverlay(TileOverlayOptions().tileProvider(heatmapProvider))!!
         }
         else{
-            heatmapProvider.setData(locations)
             heatmapOverlay!!.clearTileCache()
+            heatmapProvider.setData(locations)
         }
-
     }
 
     //    for debug locations
     fun addRandomLocations(number: Int){
         val defaultLat = 51.109088f
         val defaultLng = 17.031801f
-
+        val radius = 0.01f
         for(i in 0..number){
-            val randomLat = random(defaultLat - 0.001f, defaultLat + 0.001f)
-            val randomLng = random(defaultLng - 0.002f, defaultLng + 0.002f)
+//            val randomLat = random(defaultLat - radius, defaultLat + radius)
+//            val randomLng = random(defaultLng - radius*2, defaultLng + radius*2)
+            val (lat, lng) = randomLatLng(radius, defaultLat, defaultLng)
             val ref = database.getReference("user_" + i + "/lastLocation")
-            ref.setValue("$randomLat $randomLng")
+            ref.setValue("$lat $lng")
         }
     }
 
@@ -238,12 +243,28 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         return min + Math.random() * (max - min)
     }
 
+    fun randomLatLng(radius:Float, centerLat: Float, centerLng: Float): Pair<Double, Double> {
+        val r = radius * Math.sqrt(Math.random())
+        val theta = Math.random() * 2 * Math.PI
+        val lat = centerLat + r * Math.cos(theta)/1.7
+        val lng = centerLng + r * Math.sin(theta)
+
+//        more than 8 decimal places cause google maps heatmap locations to bug on different zooms
+        val latRounded = BigDecimal(lat).setScale(6, RoundingMode.HALF_EVEN).toDouble()
+        val lngRounded = BigDecimal(lng).setScale(6, RoundingMode.HALF_EVEN).toDouble()
+
+        return Pair(latRounded, lngRounded)
+    }
+
 //    to be fixed
     fun getHeatmapRadius(zoom: Double): Int {
         val someLatValue = 51.726332;
         val desiredRadiusInMeters = 20;
 
-        val metersPerPx = 156543.03392 * Math.cos(someLatValue * Math.PI / 180) / Math.pow(2.0,zoom);
+        val metersPerPx = 156543.03392 * Math.cos(someLatValue * Math.PI / 180) / Math.pow(
+            2.0,
+            zoom
+        );
         return MathUtils.clamp((desiredRadiusInMeters / metersPerPx).toInt(), 1, 50)
     };
 }
