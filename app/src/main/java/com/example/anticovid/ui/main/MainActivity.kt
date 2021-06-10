@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun switchFragment(mainFragmentEnum: MainFragmentEnum) {
-        with (supportFragmentManager) {
+        with(supportFragmentManager) {
             findFragmentByTag(mainViewModel.mainFragmentEnum.value?.tag)?.let {
                 beginTransaction().hide(it).commit()
             }
@@ -143,13 +143,14 @@ class MainActivity : AppCompatActivity() {
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     val deviceName = device!!.name
                     val deviceHardwareAddress = device.address // MAC address
-                    Log.wtf("bluetooth", deviceName + " " + deviceHardwareAddress)
+                    val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE).toInt() // signal strength
+                    Log.wtf("bluetooth", deviceName + " " + deviceHardwareAddress+ ", rssi: "+rssi)
                 }
             }
         }
     }
 
-    fun dicoverDevicesPeriodically(btAdapter:BluetoothAdapter){
+    fun dicoverDevicesPeriodically(btAdapter: BluetoothAdapter){
         val mainHandler = Handler(Looper.getMainLooper())
 
         mainHandler.post(object : Runnable {
