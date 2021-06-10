@@ -1,17 +1,18 @@
-package com.example.anticovid.ui.profile
+package com.example.anticovid.ui.profile.health_diary
 
-import android.content.SharedPreferences
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.anticovid.data.model.HealthDiaryEntry
+import com.example.anticovid.data.model.SHARED_PREFERENCES_HEALTH_DIARY
 import com.example.anticovid.data.model.SHARED_PREFERENCES_HEALTH_DIARY_ENTRIES
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HealthDiaryViewModel(private val sharedPreferences: SharedPreferences) : ViewModel() {
+class HealthDiaryViewModel(private val context: Context) : ViewModel() {
 
     private val _isTodaysEntryCompleted = MutableLiveData<Boolean>()
     val isTodaysEntryCompleted: LiveData<Boolean> = _isTodaysEntryCompleted
@@ -20,35 +21,33 @@ class HealthDiaryViewModel(private val sharedPreferences: SharedPreferences) : V
     val healthDiaryEntries: LiveData<List<HealthDiaryEntry>> = _healthDiaryEntries
 
     init {
-        val entries = loadEntries()
-        val sdf = SimpleDateFormat("ddMMyyyy")
-        val today = sdf.format(Calendar.getInstance().time)
-
-        entries.forEach {
-            if (sdf.format(it.date.time) == today) {
-                _isTodaysEntryCompleted.value = true
-                return@forEach
-            }
+        loadEntries().also {
+            _healthDiaryEntries.value = it
+            if (it.isNotEmpty())
+                checkIfEntryFromToday(it.first())
         }
-
-        _healthDiaryEntries.value = entries
     }
 
-    fun newEntryAdded(newEntry: HealthDiaryEntry) {
+    private fun checkIfEntryFromToday(entry: HealthDiaryEntry) {
+        with (SimpleDateFormat("ddMMyyyy")) {
+            val today = format(Calendar.getInstance().time)
+            _isTodaysEntryCompleted.value = format(entry.date.time) == today
+        }
+    }
+
+    fun saveEntry(entry: HealthDiaryEntry) {
         _healthDiaryEntries.value = (_healthDiaryEntries.value?.toMutableList() ?: mutableListOf()).apply {
-            add(newEntry)
+            removeIf { it.date.timeInMillis == entry.date.timeInMillis }
+            add(entry)
             sortByDescending { it.date }
         }
 
-        with (SimpleDateFormat("ddMMyyyy")) {
-            if (format(newEntry.date.time) == format(Calendar.getInstance().time))
-                _isTodaysEntryCompleted.value = true
-        }
-
+        checkIfEntryFromToday(entry)
         saveEntries(Gson().toJson(_healthDiaryEntries.value))
     }
 
     private fun loadEntries(): List<HealthDiaryEntry> {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_HEALTH_DIARY, Context.MODE_PRIVATE)
         val entriesString = sharedPreferences.getString(SHARED_PREFERENCES_HEALTH_DIARY_ENTRIES, "")
         val listType = object : TypeToken<List<HealthDiaryEntry>>() {}.type
 
@@ -56,7 +55,7 @@ class HealthDiaryViewModel(private val sharedPreferences: SharedPreferences) : V
     }
 
     private fun saveEntries(entriesString: String) {
-        with (sharedPreferences.edit()) {
+        with (context.getSharedPreferences(SHARED_PREFERENCES_HEALTH_DIARY, Context.MODE_PRIVATE).edit()) {
             putString(SHARED_PREFERENCES_HEALTH_DIARY_ENTRIES, entriesString)
             apply()
         }

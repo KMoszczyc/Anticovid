@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".ui.profile.risk_assessment_test.test.RiskAssessmentTestFeverFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="@string/how_high_is_your_fever"
+        android:textColor="@color/colorTextBlack"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/fever"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6dp">
+
+        <RadioButton
+            android:id="@+id/low_fever"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/low_fever"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <RadioButton
+            android:id="@+id/medium_fever"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/medium_fever"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <RadioButton
+            android:id="@+id/high_fever"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/high_fever"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <RadioButton
+            android:id="@+id/not_known"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/temp_not_taken"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+    </RadioGroup>
+
+</LinearLayout>

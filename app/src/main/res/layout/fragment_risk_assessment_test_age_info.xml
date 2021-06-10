@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".ui.profile.risk_assessment_test.test.RiskAssessmentTestInfoFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="@string/how_old_are_you"
+        android:textColor="@color/colorTextBlack"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/age_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6dp">
+
+        <RadioButton
+            android:id="@+id/young"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/young_age"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <RadioButton
+            android:id="@+id/middle_aged"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/middle_aged"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <RadioButton
+            android:id="@+id/old"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/old_age"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+    </RadioGroup>
+
+</LinearLayout>

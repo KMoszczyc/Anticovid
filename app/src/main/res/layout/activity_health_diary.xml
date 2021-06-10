@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.profile.HealthDiaryActivity">
+    tools:context=".ui.profile.health_diary.HealthDiaryActivity">
 
     <include layout="@layout/app_title_bar_with_back_bt"/>
 

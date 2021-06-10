@@ -28,50 +28,50 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         supportActionBar?.hide()
 
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory()).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory()).get(LoginViewModel::class.java).apply {
+            loginFormEnum.observe(this@LoginActivity, Observer { loginFormEnum ->
+                if (loginFormEnum == null)
+                    return@Observer
 
-        loginViewModel.loginFormEnum.observe(this, Observer { loginFormEnum ->
-            if (loginFormEnum == null)
-                return@Observer
+                // attach fragment
+                when (loginFormEnum) {
+                    LoginFormEnum.SignIn ->
+                        attachFragment(SignInFragment())
+                    LoginFormEnum.SignUp ->
+                        attachFragment(SignUpFragment())
+                }
 
-            // attach fragment
-            when (loginFormEnum) {
-                LoginFormEnum.SignIn ->
-                    attachFragment(SignInFragment())
-                LoginFormEnum.SignUp ->
-                    attachFragment(SignUpFragment())
-            }
+                Log.d("MyDebug", "fragments: ${supportFragmentManager.fragments.size}")
+            })
 
-            Log.d("MyDebug", "fragments: ${supportFragmentManager.fragments.size}")
-        })
+            loginResult.observe(this@LoginActivity, Observer { loginResult ->
+                if (loginResult == null)
+                    return@Observer
 
-        loginViewModel.loginResult.observe(this, Observer { loginResult ->
-            if (loginResult == null)
-                return@Observer
+                // take action on successful login
+                if (loginResult.success != null) {
+                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                    finish()
+                }
+            })
 
-            // take action on successful login
-            if (loginResult.success != null) {
-                startActivity(Intent(applicationContext, MainActivity::class.java))
-                finish()
-            }
-        })
+            isLoading.observe(this@LoginActivity, Observer { isLoading ->
+                if (isLoading == null)
+                    return@Observer
 
-        loginViewModel.isLoading.observe(this, Observer { isLoading ->
-            if (isLoading == null)
-                return@Observer
-
-            // update UI
-            if (isLoading) {
-                clearFocus()
-                hideSoftKeyboard()
-                disableTouchEvents()
-                loading.visibility = View.VISIBLE
-            }
-            else {
-                loading.visibility = View.GONE
-                enableTouchEvents()
-            }
-        })
+                // update UI
+                if (isLoading) {
+                    clearFocus()
+                    hideSoftKeyboard()
+                    disableTouchEvents()
+                    loading.visibility = View.VISIBLE
+                }
+                else {
+                    loading.visibility = View.GONE
+                    enableTouchEvents()
+                }
+            })
+        }
 
         // handle keyboard events
         container.viewTreeObserver.addOnGlobalLayoutListener {
