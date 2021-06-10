@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.TileOverlay
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.maps.android.SphericalUtil
 import com.google.maps.android.heatmaps.HeatmapTileProvider
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -29,6 +30,9 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
     private var database: FirebaseDatabase
     private var userId: String
     private var locationsRefPath: String
+    private var contactsRefPath: String
+
+    private var contactsRef: DatabaseReference
     private var lastLocationRef: DatabaseReference
     private var lastUpdateTimeRef: DatabaseReference
 
@@ -48,6 +52,13 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
     private var heatmapOverlay: TileOverlay? = null
     private var last_update_time_threshold_seconds = 300
 
+    private var min_contact_time_seconds = 90
+    private var min_num_of_contacts = 5
+
+    private var usersNearbyStartTimesMap = mutableMapOf<String,String>()
+    private var usersNearbyLastTimeMap = mutableMapOf<String,String>()
+
+
     init
     {
         lastLocation = Location("")
@@ -57,8 +68,11 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         userId = FirebaseAuth.getInstance().currentUser!!.uid
         database = FirebaseDatabase.getInstance("https://anticovid-93262-default-rtdb.europe-west1.firebasedatabase.app/")
         locationsRefPath = "user-$userId/locations/"
+        contactsRefPath = "user-$userId/contacts/"
+
         lastLocationRef =  database.getReference("user-$userId/lastLocation")
         lastUpdateTimeRef =  database.getReference("user-$userId/lastUpdateTime")
+        contactsRef = database.getReference("user-$userId/contacts/")
 
         database.reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -88,19 +102,46 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
     fun updateHeatMap(snapshot: DataSnapshot){
         val users = snapshot.children
         val locations = mutableListOf<LatLng>()
+
         for (user in users) {
+
             val userKeySplit = user.key!!.split("-")
 
+
             //  dont add current user circle on map, show locations updated in last 5 minutes only
-            if (userKeySplit.size <= 1 || (userKeySplit.size > 1 && userId != userKeySplit[1] && getDateDiffInSeconds(user.child("lastUpdateTime").value.toString())<last_update_time_threshold_seconds)) {
+            if(userKeySplit.size <= 1){
                 val location = stringToLatLng(user.child("lastLocation").value.toString())
                 locations.add(location)
+            }
+           else if (userKeySplit.size > 1 && userId != userKeySplit[1] && getSecondsDiffToNow(user.child("lastUpdateTime").value.toString())<last_update_time_threshold_seconds) {
+                val location = stringToLatLng(user.child("lastLocation").value.toString())
+                locations.add(location)
+                val distance = SphericalUtil.computeDistanceBetween(location, LatLng(lastLocation.latitude, lastLocation.longitude))
+//               check for contact with other people, add only new contacts
+                if(distance<10 && usersNearbyStartTimesMap.containsKey(userKeySplit[1]) && !checkIfContactExists(user.key!!, snapshot.child("user-$userId").child("contacts").children)) {
+                    val secondsDiff = getSecondsDiffBetweenDates(usersNearbyStartTimesMap[userKeySplit[1]]!!, user.child("lastUpdateTime").value.toString())
+                    if(secondsDiff < min_contact_time_seconds) {
+                        usersNearbyLastTimeMap[userKeySplit[1]] = getCurrentDateTimePretty()
+                        Log.wtf("contact", user.key + ", start time: " + usersNearbyStartTimesMap[userKeySplit[1]]+", last time: " + usersNearbyLastTimeMap[userKeySplit[1]])
+                    }
+                    else {
+                        val secondsToLastContact = getSecondsDiffBetweenDates(usersNearbyLastTimeMap[userKeySplit[1]]!!, getCurrentDateTimePretty())
+                        if (secondsToLastContact < 60) {
+                            Log.wtf("location","contact established with: " + user.key + "start contact: "+ usersNearbyStartTimesMap[userKeySplit[1]]+", lastContact: " + usersNearbyLastTimeMap[userKeySplit[1]])
+                            contactsRef.child(user.key+"="+getCurrentDateTime()).setValue(1)
+                        }
+                        usersNearbyLastTimeMap.remove(userKeySplit[1])
+                        usersNearbyStartTimesMap.remove(userKeySplit[1])
+                    }
+                } else{
+                    usersNearbyStartTimesMap[userKeySplit[1]] = getCurrentDateTimePretty()
+                    usersNearbyLastTimeMap[userKeySplit[1]] = getCurrentDateTimePretty()
+                }
             }
         }
 
         addHeatMap(locations)
     }
-
 
     fun updateLocation()
     {
@@ -176,11 +217,13 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-
-    private fun checkInternetConenction(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
-        return activeNetworkInfo != null
+    fun checkIfContactExists(contactUser:String, contacts: Iterable<DataSnapshot>): Boolean {
+        for (c in contacts){
+            if(c.key!!.split("=")[0] == contactUser){
+                return true
+            }
+        }
+        return false
     }
 
     fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
@@ -196,10 +239,18 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         return Calendar.getInstance().time.toString("yyyy-MM-dd HH:mm:ss")
     }
 
-    fun getDateDiffInSeconds(dateStr: String): Int {
+    fun getSecondsDiffToNow(dateStr: String): Int {
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr)
         val today = Date()
         val diff = today.time - date.time
+        val seconds = (diff / 1000).toInt()
+        return seconds
+    }
+
+    fun getSecondsDiffBetweenDates(date_first: String, date_last: String): Int {
+        val date1_parsed = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date_first)
+        val date2_parsed = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date_last)
+        val diff = date2_parsed.time - date1_parsed.time
         val seconds = (diff / 1000).toInt()
         return seconds
     }
