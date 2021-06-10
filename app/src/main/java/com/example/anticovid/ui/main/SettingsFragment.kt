@@ -37,17 +37,17 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        sharedPref = context!!.getSharedPreferences(SHARED_PREFERENCES_SETTINGS,Context.MODE_PRIVATE)
-
-        sharedPref.getString(SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY, DEFAULT_COUNTRY)?.let {
-            setupCountriesSpinner(it)
+        sharedPref = requireContext().getSharedPreferences(SHARED_PREFERENCES_SETTINGS,Context.MODE_PRIVATE).apply {
+            getString(SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY, DEFAULT_COUNTRY)?.let {
+                setupCountriesSpinner(it)
+            }
         }
     }
 
     private fun setupCountriesSpinner(defaultCountry: String) {
-        val (flagsDrawables, flagsCountryCodes) = loadImages(context!!)
-        val (countries, countryCodes) = readCountries(context!!)
-        val spinnerAdapter = SpinnerAdapter(context!!, countries.toTypedArray(), countryCodes, flagsCountryCodes, flagsDrawables)
+        val (flagsDrawables, flagsCountryCodes) = loadImages(requireContext())
+        val (countries, countryCodes) = readCountries(requireContext())
+        val spinnerAdapter = SpinnerAdapter(requireContext(), countries.toTypedArray(), countryCodes, flagsCountryCodes, flagsDrawables)
 
         countries_spinner.apply {
             adapter = spinnerAdapter

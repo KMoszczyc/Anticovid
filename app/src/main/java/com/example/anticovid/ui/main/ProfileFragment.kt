@@ -6,11 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.example.anticovid.R
-import com.example.anticovid.ui.login.LoginActivity
-import com.example.anticovid.ui.profile.HealthDiaryActivity
+import com.example.anticovid.ui.profile.health_diary.HealthDiaryActivity
 import com.example.anticovid.ui.profile.MyDataActivity
+import com.example.anticovid.ui.profile.risk_assessment_test.RiskAssessmentTestsActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : Fragment() {
@@ -31,7 +30,7 @@ class ProfileFragment : Fragment() {
         }
 
         risk_assessment_test.setOnClickListener {
-            Toast.makeText(activity, "Risk assesment test", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(activity, RiskAssessmentTestsActivity::class.java))
         }
     }
 }

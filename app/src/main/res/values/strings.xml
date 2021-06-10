@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Anticovid</string>
     <string name="prompt_email">Email</string>
@@ -31,12 +32,12 @@
     <string name="profile">Profile</string>
     <string name="my_data">My data</string>
     <string name="health_diary">Health Diary</string>
-    <string name="risk_assessment_test">Risk assessment test</string>
+    <string name="risk_assessment_test">Risk Assessment Test</string>
     <string name="back">Back</string>
     <string name="your_name">Your name:</string>
     <string name="hello">Hello</string>
     <string name="your_current_state">Your current state:</string>
-    <string name="low_risk_of_infection">Low risk of infection</string>
+    <string name="low_risk_of_infection">Low risk of infection </string>
     <string name="sign_out">Sign out</string>
     <string name="my_data_question_1">Are you suffering from any ailment?</string>
     <string name="my_data_question_1_no">No, I am healthy.</string>
@@ -51,15 +52,76 @@
         <item>B-</item>
         <item>0+</item>
         <item>0-</item>
-        <item>I dont know</item>
+        <item>I don`t know</item>
     </string-array>
     <string name="my_data_question_3">Do you smoke cigarettes or other tobacco products?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="complete_health_diary_entry">Click and complete your today\'s entry to the health diary</string>
-    <string name="health_diary_entry_completed">Today\'s health diary entry completed</string>
+    <string name="complete_health_diary_entry">Click and complete your today`s entry to the health diary</string>
+    <string name="health_diary_entry_completed">Today`s health diary entry completed</string>
     <string name="previous_entries">Previous entries:</string>
     <string name="no_previous_entries">No previous entries</string>
     <string name="entry_date">Entry date:</string>
     <string name="save">Save</string>
+    <string name="temperature">Temperature:</string>
+    <string name="temp_hint">36.6</string>
+    <string name="symptoms">Symptoms</string>
+    <string name="runny_nose">Runny nose</string>
+    <string name="none">None</string>
+    <string name="slight">Slight</string>
+    <string name="severe">Severe</string>
+    <string name="cough">Cough</string>
+    <string name="shivering">Shivering</string>
+    <string name="aching_muscles">Aching muscles</string>
+    <string name="places_and_contacts">Places and contacts</string>
+    <string name="places_and_contacts_info">With whom I have met, where I have been</string>
+    <string name="value_to_low">Value to low</string>
+    <string name="value_to_high">Value to high</string>
+    <string name="complete_rat">Click and perform the Risk Assessment Test</string>
+    <string name="rat_completed">Risk Assessment Test completed</string>
+    <string name="tests_performed">Tests performed:</string>
+    <string name="no_tests_performed">No tests performed</string>
+    <string name="next">Next</string>
+    <string name="covid_19_infection_risk_assessment_test">Covid-19 infection risk assessment test</string>
+    <string name="important_note">Important note</string>
+    <string name="important_note_pt1">This test is not a diagnosis. This can only be done by a doctor and with the use of covid-19 test.</string>
+    <string name="important_note_pt2">This test helps to monitor your health condition.</string>
+    <string name="important_note_pt3">Complete this test truthfully - you do it for your own safety.</string>
+    <string name="how_old_are_you">How old are you?</string>
+    <string name="young_age">Less then 30</string>
+    <string name="middle_aged">Between 30 and 60</string>
+    <string name="old_age">More then 60</string>
+    <string name="select_answers">Select answers that apply to you</string>
+    <string name="chronic_lung_disease">Chronic lung disease</string>
+    <string name="cardiac_failure">Cardiac failure</string>
+    <string name="diseases_or_drugs_that_reduce_immunity">Diseases or drugs that reduce immunity</string>
+    <string name="chronic_liver_disease">Chronic liver disease</string>
+    <string name="diabetes">Diabetes</string>
+    <string name="obesity">Obesity</string>
+    <string name="symptoms_question">Do you have any of the following symptoms unrelated to your chronic disease?</string>
+    <string name="fever">Fever</string>
+    <string name="breathing_troubles">Breathing troubles</string>
+    <string name="how_high_is_your_fever">How high is your fever?</string>
+    <string name="low_fever">Between 36.6 C and 38 C</string>
+    <string name="medium_fever">Between 38.1 C and 40 C</string>
+    <string name="high_fever">Above 40 C</string>
+    <string name="temp_not_taken">I have not taken the temperature</string>
+    <string name="are_your_symptoms_worsening">Are your symptoms worsening rapidly?</string>
+    <string name="thank_you_for_completing_test">Thank you for completing the Risk Assessment Test.</string>
+    <string name="headache">Headache</string>
+    <string name="diarrhoea">Diarrhoea</string>
+    <string name="sore_throat">Sore throat</string>
+    <string name="impaired_smell_or_taste">Impaired taste or smell</string>
+    <string name="contact_question">Have you had close contact with a person suspected of being infected with the covid-19 in the last 2 weeks?</string>
+    <string name="your_risk_assessment_test_result">Your result:</string>
+    <string name="monitor_your_symptoms_we_recommend_performing_the_risk_assessment_test_on_regular_basis">Monitor your symptoms. We recommend performing the Risk Assessment Test on regular basis.</string>
+    <string name="monitor_your_symptoms_and_repeat_the_risk_assessment_test_twice_a_day">Monitor your symptoms and repeat the Risk Assessment Test twice a day.</string>
+    <string name="medium_risk_of_infection">Medium risk of infection </string>
+    <string name="remember_about_the_rules_of_hygiene">Remember about the rules of hygiene. Take care of yourself and the others.</string>
+    <string name="high_risk_of_infection">High risk of infection </string>
+    <string name="close">Close</string>
+    <string name="title_activity_risk_assessment_test_summary">RiskAssessmentTestSummaryActivity</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="diseases">Diseases</string>
 </resources>
