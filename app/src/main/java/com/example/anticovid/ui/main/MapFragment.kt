@@ -23,7 +23,7 @@ class MapFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { googleMap ->
         map = googleMap
-        locationRepository = LocationRepository(context!!, map)
+        locationRepository = LocationRepository(requireContext(), map)
     }
 
     override fun onCreateView(
