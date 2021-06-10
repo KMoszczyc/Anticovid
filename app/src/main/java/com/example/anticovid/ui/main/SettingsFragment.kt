@@ -37,10 +37,10 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        sharedPref = context!!.getSharedPreferences(SHARED_PREFERENCES_SETTINGS,Context.MODE_PRIVATE)
-
-        sharedPref.getString(SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY, DEFAULT_COUNTRY)?.let {
-            setupCountriesSpinner(it)
+        sharedPref = context!!.getSharedPreferences(SHARED_PREFERENCES_SETTINGS,Context.MODE_PRIVATE).apply {
+            getString(SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY, DEFAULT_COUNTRY)?.let {
+                setupCountriesSpinner(it)
+            }
         }
     }
 

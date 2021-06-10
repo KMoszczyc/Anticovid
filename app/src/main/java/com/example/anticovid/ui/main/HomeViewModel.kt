@@ -9,7 +9,7 @@ import com.example.anticovid.data.repository.ApiRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class HomeViewModel(context: Context?) : ViewModel() {
+class HomeViewModel(context: Context) : ViewModel() {
 
     private val apiRepository = ApiRepository()
 
@@ -25,7 +25,7 @@ class HomeViewModel(context: Context?) : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     init {
-        context!!.getSharedPreferences(SHARED_PREFERENCES_SETTINGS,Context.MODE_PRIVATE)?.let {
+        context.getSharedPreferences(SHARED_PREFERENCES_SETTINGS,Context.MODE_PRIVATE)?.let {
             currentCountry = it.getString(SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY, DEFAULT_COUNTRY) ?: DEFAULT_COUNTRY
             currentCountryCode = it.getString(SHARED_PREFERENCES_SETTINGS_DEFAULT_COUNTRY_CODE, DEFAULT_COUNTRY_CODE) ?: DEFAULT_COUNTRY_CODE
         }
