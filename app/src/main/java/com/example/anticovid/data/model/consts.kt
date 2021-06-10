@@ -21,3 +21,4 @@ const val RISK_ASSESSMENT_TEST_KEY = "risk_assessment_test_key"
 
 const val SHARED_PREFERENCES_RISK_ASSESSMENT_TEST = "risk_assessment_test"
 const val SHARED_PREFERENCES_RISK_ASSESSMENT_TESTS_PERFORMED = "risk_assessment_test_tests_performed"
+const val SHARED_PREFERENCES_RISK_ASSESSMENT_TEST_LATEST_RESULT = "risk_assessment_test_latest_result"

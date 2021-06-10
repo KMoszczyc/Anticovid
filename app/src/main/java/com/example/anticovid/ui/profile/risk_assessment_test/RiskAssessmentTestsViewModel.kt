@@ -1,6 +1,7 @@
 package com.example.anticovid.ui.profile.risk_assessment_test
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,6 +43,16 @@ class RiskAssessmentTestsViewModel(private val context: Context) : ViewModel() {
 
         checkIfTestFromToday(test)
         saveTestsPerformed(Gson().toJson(_testsPerformed.value))
+        saveLatestResult(test.result.name)
+    }
+
+    private fun saveLatestResult(result: String) {
+        with (context.getSharedPreferences(SHARED_PREFERENCES_RISK_ASSESSMENT_TEST, Context.MODE_PRIVATE).edit()) {
+            putString(SHARED_PREFERENCES_RISK_ASSESSMENT_TEST_LATEST_RESULT, result)
+            apply()
+        }
+
+        Log.d("test_result", "Test result: $result")
     }
 
     private fun loadTestsPerformed(): List<RiskAssessmentTest> {
