@@ -1,7 +1,12 @@
 package com.example.NavigationForBlind.DeviceData
 
 import android.Manifest
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import android.net.ConnectivityManager
@@ -70,7 +75,9 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
             }
         })
 
+        bluetoothPermission()
         addRandomLocations(900)
+        bluetoothScanning()
 
         map.setOnCameraChangeListener(object : OnCameraChangeListener {
             private var currentZoom = -1f
@@ -85,6 +92,32 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         })
     }
 
+    fun bluetoothScanning() {
+        Log.wtf("bluetooth","halo")
+        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        context.registerReceiver(mReceiver, filter)
+        val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        mBluetoothAdapter.startDiscovery()
+    }
+
+
+    // Create a BroadcastReceiver for ACTION_FOUND.
+    private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val action = intent.action
+            if (BluetoothDevice.ACTION_FOUND == action) {
+                // Discovery has found a device. Get the BluetoothDevice
+                // object and its info from the Intent.
+                val device =
+                    intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                val deviceName = device!!.name
+                val deviceHardwareAddress = device.address // MAC address
+                Log.wtf("Device Name: ", "device $deviceName")
+                Log.wtf("deviceHardwareAddress ", "hard$deviceHardwareAddress")
+            }
+        }
+    }
+
     fun updateHeatMap(snapshot: DataSnapshot){
         val users = snapshot.children
         val locations = mutableListOf<LatLng>()
@@ -92,7 +125,11 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
             val userKeySplit = user.key!!.split("-")
 
             //  dont add current user circle on map, show locations updated in last 5 minutes only
-            if (userKeySplit.size <= 1 || (userKeySplit.size > 1 && userId != userKeySplit[1] && getDateDiffInSeconds(user.child("lastUpdateTime").value.toString())<last_update_time_threshold_seconds)) {
+            if (userKeySplit.size <= 1 || (userKeySplit.size > 1 && userId != userKeySplit[1] && getDateDiffInSeconds(
+                    user.child(
+                        "lastUpdateTime"
+                    ).value.toString()
+                )<last_update_time_threshold_seconds)) {
                 val location = stringToLatLng(user.child("lastLocation").value.toString())
                 locations.add(location)
             }
@@ -176,6 +213,22 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
+    fun bluetoothPermission(){
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH)
+            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context, Manifest.permission.BLUETOOTH
+            ) != PackageManager.PERMISSION_GRANTED) {
+            Log.wtf("bluetooth", "requiered bluetooth permissions")
+            return
+        }
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADMIN)
+            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context, Manifest.permission.BLUETOOTH_ADMIN
+            ) != PackageManager.PERMISSION_GRANTED) {
+            Log.wtf("bluetooth", "requiered bluetooth admin permissions")
+            return
+        }
+    }
 
     private fun checkInternetConenction(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
@@ -243,7 +296,7 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         return min + Math.random() * (max - min)
     }
 
-    fun randomLatLng(radius:Float, centerLat: Float, centerLng: Float): Pair<Double, Double> {
+    fun randomLatLng(radius: Float, centerLat: Float, centerLng: Float): Pair<Double, Double> {
         val r = radius * Math.sqrt(Math.random())
         val theta = Math.random() * 2 * Math.PI
         val lat = centerLat + r * Math.cos(theta)/1.7
