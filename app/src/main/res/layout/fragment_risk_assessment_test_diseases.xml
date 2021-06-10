@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".ui.profile.risk_assessment_test.test.RiskAssessmentTestDiseasesFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="@string/select_answers"
+        android:textColor="@color/colorTextBlack"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp">
+
+        <CheckBox
+            android:id="@+id/chronic_lung_disease"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/chronic_lung_disease"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/cardiac_failure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/cardiac_failure"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/diseases_or_drugs_that_reduce_immunity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/diseases_or_drugs_that_reduce_immunity"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/chronic_liver_disease"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/chronic_liver_disease"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/diabetes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/diabetes"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/obesity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/obesity"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/none"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+    </LinearLayout>
+
+</LinearLayout>

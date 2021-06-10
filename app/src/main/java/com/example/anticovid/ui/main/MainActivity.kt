@@ -32,17 +32,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         this.supportActionBar?.hide()
 
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java).apply {
+            isUserSignedIn.observe(this@MainActivity, Observer { isUserSignedIn ->
+                if (isUserSignedIn == null)
+                    return@Observer
 
-        mainViewModel.isUserSignedIn.observe(this, Observer { isUserSignedIn ->
-            if (isUserSignedIn == null)
-                return@Observer
-
-            if (!isUserSignedIn) {
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            }
-        })
+                if (!isUserSignedIn) {
+                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                    finish()
+                }
+            })
+        }
 
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun switchFragment(mainFragmentEnum: MainFragmentEnum) {
-        supportFragmentManager.run {
+        with (supportFragmentManager) {
             findFragmentByTag(mainViewModel.mainFragmentEnum.value?.tag)?.let {
                 beginTransaction().hide(it).commit()
             }

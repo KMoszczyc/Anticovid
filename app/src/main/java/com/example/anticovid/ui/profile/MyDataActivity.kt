@@ -1,7 +1,6 @@
 package com.example.anticovid.ui.profile
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,23 +9,24 @@ import android.widget.ArrayAdapter
 import com.example.anticovid.R
 import com.example.anticovid.data.model.*
 import com.example.anticovid.ui.login.afterTextChanged
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_my_data.*
 import kotlinx.android.synthetic.main.app_title_bar_with_back_bt.*
 
 class MyDataActivity : AppCompatActivity() {
 
-    private lateinit var sharedPref: SharedPreferences
-    private lateinit var username: String
+    private lateinit var myData: MyData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_data)
         this.supportActionBar?.hide()
 
-        sharedPref = getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE)
+        myData = loadMyData()
 
         initUI()
-        initData()
+        updateUI()
     }
 
     private fun initUI() {
@@ -35,90 +35,80 @@ class MyDataActivity : AppCompatActivity() {
         }
 
         username_et.afterTextChanged {
-            username = it.trim()
+            myData.username = it
         }
 
-        question1_yes.setOnClickListener {
-            saveAnswer(SHARED_PREFERENCES_MY_DATA_QUESTION_1,true)
-        }
-
-        question1_no.setOnClickListener {
-            saveAnswer(SHARED_PREFERENCES_MY_DATA_QUESTION_1,false)
+        is_suffering_from_ailment.setOnCheckedChangeListener { _, checkedId ->
+            myData.isSufferingFromAilment = when (checkedId) {
+                is_suffering_from_ailment_yes.id -> true
+                is_suffering_from_ailment_no.id -> false
+                else -> return@setOnCheckedChangeListener
+            }
         }
 
         blood_type_spinner.apply {
-            adapter = ArrayAdapter.createFromResource(this@MyDataActivity, R.array.blood_types_array, R.layout.item_blood_type).apply {
+            adapter = ArrayAdapter.createFromResource(
+                this@MyDataActivity,
+                R.array.blood_types_array,
+                R.layout.item_blood_type
+            ).apply {
                 setDropDownViewResource(R.layout.item_blood_type_dropdown)
             }
 
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                    with (sharedPref.edit()) {
-                        putString(SHARED_PREFERENCES_MY_DATA_QUESTION_2, parent.getItemAtPosition(position).toString())
-                        apply()
-                    }
+                    myData.bloodType = parent.getItemAtPosition(position).toString()
                 }
                 override fun onNothingSelected(parent: AdapterView<*>) { }
             }
         }
 
-        question3_yes.setOnClickListener {
-            saveAnswer(SHARED_PREFERENCES_MY_DATA_QUESTION_3,true)
-        }
-
-        question3_no.setOnClickListener {
-            saveAnswer(SHARED_PREFERENCES_MY_DATA_QUESTION_3,false)
-        }
-    }
-
-    private fun saveAnswer(key: String, answer: Boolean) {
-        with (sharedPref.edit()) {
-            putBoolean(key, answer)
-            apply()
-        }
-    }
-
-    private fun initData() {
-        with (sharedPref) {
-            //Username
-            getString(SHARED_PREFERENCES_MY_DATA_USERNAME, "")?.let {
-                username = it
-                username_et.setText(it)
+        is_smoking.setOnCheckedChangeListener { _, checkedId ->
+            myData.isSmoking = when (checkedId) {
+                is_smoking_yes.id -> true
+                is_smoking_no.id -> false
+                else -> return@setOnCheckedChangeListener
             }
+        }
 
-            //Q1
-            if (getBoolean(SHARED_PREFERENCES_MY_DATA_QUESTION_1, false))
-                question1.check(R.id.question1_yes)
-            else
-                question1.check(R.id.question1_no)
-
-            //Q2
-            val bloodTypes = resources.getStringArray(R.array.blood_types_array)
-            val bloodType = getString(SHARED_PREFERENCES_MY_DATA_QUESTION_2, "") ?: ""
-
-            if (bloodType != "")
-                bloodTypes.forEachIndexed { index, type ->
-                    if (type == bloodType) {
-                        blood_type_spinner.setSelection(index)
-                        return@forEachIndexed
-                    }
-                }
-            else
-                blood_type_spinner.setSelection(bloodTypes.lastIndex)
-
-            //Q3
-            if (getBoolean(SHARED_PREFERENCES_MY_DATA_QUESTION_3, false))
-                question3.check(R.id.question3_yes)
-            else
-                question3.check(R.id.question3_no)
+        save_bt.setOnClickListener {
+            saveMyData(Gson().toJson(myData))
+            finish()
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+    private fun updateUI() {
+        username_et.setText(myData.username)
 
-        with (sharedPref.edit()) {
-            putString(SHARED_PREFERENCES_MY_DATA_USERNAME, username)
+        is_suffering_from_ailment.check(
+            if (myData.isSufferingFromAilment)
+                R.id.is_suffering_from_ailment_yes
+            else
+                R.id.is_suffering_from_ailment_no
+        )
+
+        blood_type_spinner.setSelection(
+            resources.getStringArray(R.array.blood_types_array).indexOfFirst { it == myData.bloodType }
+        )
+
+        is_smoking.check(
+            if (myData.isSmoking)
+                R.id.is_smoking_yes
+            else
+                R.id.is_smoking_no)
+    }
+
+    private fun loadMyData(): MyData {
+        val myDataString = getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE)
+            .getString(SHARED_PREFERENCES_MY_DATA, "")
+        val myDataTypeToken = object : TypeToken<MyData>() {}.type
+
+        return Gson().fromJson(myDataString, myDataTypeToken) ?: MyData()
+    }
+
+    private fun saveMyData(myDataString: String) {
+        with (getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE).edit()) {
+            putString(SHARED_PREFERENCES_MY_DATA, myDataString)
             apply()
         }
     }

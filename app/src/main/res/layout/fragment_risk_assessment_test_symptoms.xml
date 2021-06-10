@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".ui.profile.risk_assessment_test.test.RiskAssessmentTestSymptomsFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="@string/symptoms_question"
+        android:textColor="@color/colorTextBlack"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp">
+
+        <CheckBox
+            android:id="@+id/fever"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/fever"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/cough"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/cough"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/breathing_troubles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/breathing_troubles"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/aching_muscles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/aching_muscles"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/shivering"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/shivering"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/headache"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/headache"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/diarrhoea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/diarrhoea"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/sore_throat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/sore_throat"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/impaired_smell_or_taste"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/impaired_smell_or_taste"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+
+        <CheckBox
+            android:id="@+id/none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/none"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            app:buttonTint="@color/colorMainThemeBlue" />
+    </LinearLayout>
+
+</LinearLayout>
