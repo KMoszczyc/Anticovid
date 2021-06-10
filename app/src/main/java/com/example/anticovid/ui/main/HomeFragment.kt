@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeViewModel = ViewModelProvider(this, HomeViewModelFactory(context!!))
+        homeViewModel = ViewModelProvider(this, HomeViewModelFactory(requireContext()))
             .get(HomeViewModel::class.java).apply {
                 isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
                     if (isLoading == null)
@@ -49,12 +49,12 @@ class HomeFragment : Fragment() {
                 })
 
                 countryDataModel.observe(viewLifecycleOwner, Observer { countryDataModel ->
-                    val gridAdapter = GridAdapter(context!!, countryDataModel)
+                    val gridAdapter = GridAdapter(requireContext(), countryDataModel)
                     covid_gridView.adapter = gridAdapter
                 })
         }
 
-        sharedPref = context!!.getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE).also {
+        sharedPref = requireContext().getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE).also {
             updateGreetings(it)
             it.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
                 if (key == SHARED_PREFERENCES_MY_DATA)
@@ -74,9 +74,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupCountriesSpinner(defaultCountry: String) {
-        val (flagsDrawables, flagsCountryCodes) = loadImages(context!!)
-        val (countries, countryCodes) = readCountries(context!!)
-        val spinnerAdapter = SpinnerAdapter(context!!, countries.toTypedArray(), countryCodes, flagsCountryCodes, flagsDrawables)
+        val (flagsDrawables, flagsCountryCodes) = loadImages(requireContext())
+        val (countries, countryCodes) = readCountries(requireContext())
+        val spinnerAdapter = SpinnerAdapter(requireContext(), countries.toTypedArray(), countryCodes, flagsCountryCodes, flagsDrawables)
 
         countries_spinner.apply {
             adapter = spinnerAdapter
