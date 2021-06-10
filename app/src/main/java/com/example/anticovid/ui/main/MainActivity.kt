@@ -1,6 +1,7 @@
 package com.example.anticovid.ui.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
@@ -8,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -20,6 +22,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.anticovid.R
 import com.example.anticovid.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import java.net.NetworkInterface
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -120,6 +124,8 @@ class MainActivity : AppCompatActivity() {
             requestPermissions(permissions, REQUEST_CODE)
         }
 
+        getDeviceMac()
+
         val requestCode = 1;
         val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
             putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 3600)
@@ -136,15 +142,21 @@ class MainActivity : AppCompatActivity() {
 
         override fun onReceive(context: Context, intent: Intent) {
             val action: String? = intent.action
-            Log.wtf("bluetooth", action)
             when(action) {
                 BluetoothDevice.ACTION_FOUND -> {
                     val device: BluetoothDevice? =
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     val deviceName = device!!.name
                     val deviceHardwareAddress = device.address // MAC address
-                    val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE).toInt() // signal strength
-                    Log.wtf("bluetooth", deviceName + " " + deviceHardwareAddress+ ", rssi: "+rssi)
+
+                    val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
+                        .toInt() // signal strength
+                    Log.wtf(
+                        "bluetooth",
+                        deviceName + " " + deviceHardwareAddress + " " + device.type + " " + device.uuids + ", rssi: " + rssi + ", meters: " + rssiToMeters(
+                            rssi
+                        )
+                    )
                 }
             }
         }
@@ -162,6 +174,41 @@ class MainActivity : AppCompatActivity() {
                 mainHandler.postDelayed(this, 60000)
             }
         })
+    }
+
+    fun rssiToMeters(rssi: Int): Double {
+        val tx_power = -60.0
+        return Math.pow(10.0, (tx_power - rssi) / (10 * 2))
+    }
+
+    @SuppressLint("HardwareIds")
+    fun getDeviceMac(){
+        var address = getMacAddr()
+        Log.wtf("mac address", address)
+    }
+
+    //getting mac address from mobile
+    private fun getMacAddr(): String? {
+        try {
+            val all: List<NetworkInterface> =
+                Collections.list(NetworkInterface.getNetworkInterfaces())
+            for (nif in all) {
+                if (!nif.getName().equals("wlan0", ignoreCase = true)) continue
+                val macBytes: ByteArray = nif.getHardwareAddress() ?: return ""
+                val res1 = StringBuilder()
+                for (b in macBytes) {
+                    // res1.append(Integer.toHexString(b & 0xFF) + ":");
+                    res1.append(String.format("%02X:", b))
+                }
+                if (res1.length > 0) {
+                    res1.deleteCharAt(res1.length - 1)
+                }
+                return res1.toString()
+            }
+        } catch (ex: Exception) {
+            //handle exception
+        }
+        return ""
     }
 
 }
