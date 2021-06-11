@@ -8,6 +8,7 @@ import android.net.ConnectivityManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.math.MathUtils
+import com.example.anticovid.data.model.*
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -32,6 +33,7 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
     private var locationsRefPath: String
     private var contactsRefPath: String
 
+    private var userRef: DatabaseReference
     private var contactsRef: DatabaseReference
     private var lastLocationRef: DatabaseReference
     private var lastUpdateTimeRef: DatabaseReference
@@ -73,10 +75,27 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         lastLocationRef =  database.getReference("user-$userId/lastLocation")
         lastUpdateTimeRef =  database.getReference("user-$userId/lastUpdateTime")
         contactsRef = database.getReference("user-$userId/contacts/")
+        userRef = database.getReference("user-$userId")
+
+//       database.getReference("user-$userId/infectionRisk").limitToFirst(1).get().onSuccessTask { snapshot ->
+//           {
+//               if (!snapshot.result.exists()) {
+//                   userRef.child("infectionRisk").setValue(0)
+//               }
+//           }
+//       }
+
 
         database.reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 updateHeatMap(snapshot)
+                var contact_infection_risk = sumInfectionRiskFromContacts(snapshot.child("user-$userId").child("contacts").children)
+
+                with (context.getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE).edit()) {
+                    putInt(SHARED_PREFERENCES_CONTACTS_INFECTION_RISK, contact_infection_risk.toInt())
+                    apply()
+                }
+                updateInfectionRisk(contact_infection_risk.toInt())
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -107,7 +126,6 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
 
             val userKeySplit = user.key!!.split("-")
 
-
             //  dont add current user circle on map, show locations updated in last 5 minutes only
             if(userKeySplit.size <= 1){
                 val location = stringToLatLng(user.child("lastLocation").value.toString())
@@ -118,7 +136,7 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
                 locations.add(location)
                 val distance = SphericalUtil.computeDistanceBetween(location, LatLng(lastLocation.latitude, lastLocation.longitude))
 //               check for contact with other people, add only new contacts
-                if(distance<10 && usersNearbyStartTimesMap.containsKey(userKeySplit[1]) && !checkIfContactExists(user.key!!, snapshot.child("user-$userId").child("contacts").children)) {
+                if(distance<10 && usersNearbyStartTimesMap.containsKey(userKeySplit[1])) {
                     val secondsDiff = getSecondsDiffBetweenDates(usersNearbyStartTimesMap[userKeySplit[1]]!!, user.child("lastUpdateTime").value.toString())
                     if(secondsDiff < min_contact_time_seconds) {
                         usersNearbyLastTimeMap[userKeySplit[1]] = getCurrentDateTimePretty()
@@ -128,7 +146,11 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
                         val secondsToLastContact = getSecondsDiffBetweenDates(usersNearbyLastTimeMap[userKeySplit[1]]!!, getCurrentDateTimePretty())
                         if (secondsToLastContact < 60) {
                             Log.wtf("location","contact established with: " + user.key + "start contact: "+ usersNearbyStartTimesMap[userKeySplit[1]]+", lastContact: " + usersNearbyLastTimeMap[userKeySplit[1]])
-                            contactsRef.child(user.key+"="+getCurrentDateTime()).setValue(1)
+                            val userInfectionRate = user.child("infectionRisk").value.toString().toInt()
+                            val oldContactKey = getContactKey(user.key!!, snapshot.child("user-$userId").child("contacts").children)
+                            if(oldContactKey!="")
+                                contactsRef.child(oldContactKey!!).setValue(null);
+                            contactsRef.child(user.key+"="+getCurrentDateTime()).setValue(userInfectionRate)
                         }
                         usersNearbyLastTimeMap.remove(userKeySplit[1])
                         usersNearbyStartTimesMap.remove(userKeySplit[1])
@@ -226,6 +248,23 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         return false
     }
 
+    fun getContactKey(contactUser:String, contacts: Iterable<DataSnapshot>): String? {
+        for (c in contacts){
+            if(c.key!!.split("=")[0] == contactUser){
+                return c.key
+            }
+        }
+        return ""
+    }
+
+    fun sumInfectionRiskFromContacts(contacts: Iterable<DataSnapshot>): Double {
+        var sum = 0.0
+        for (c in contacts){
+            sum += c.value.toString().toDouble()/10
+        }
+        return sum
+    }
+
     fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
         val formatter = SimpleDateFormat(format, locale)
         return formatter.format(this)
@@ -318,4 +357,18 @@ class LocationRepository(private var context: Context, private var map: GoogleMa
         );
         return MathUtils.clamp((desiredRadiusInMeters / metersPerPx).toInt(), 1, 50)
     };
+
+    fun updateInfectionRisk(contact_infection_risk:Int){
+        val sharedPrefTestInfectionRisk = context.getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE)
+        val test_infection_risk = sharedPrefTestInfectionRisk.getInt(SHARED_PREFERENCES_TEST_INFECTION_RISK, 0)
+        val infection_risk = Math.max(contact_infection_risk, test_infection_risk)
+
+        Log.wtf("update infection risk","contact: $contact_infection_risk, test: $test_infection_risk, total: $infection_risk")
+        database.reference.child("user-$userId").child("infectionRisk").setValue(infection_risk)
+
+        with (context.getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE).edit()) {
+            putInt(SHARED_PREFERENCES_INFECTION_RISK, infection_risk)
+            apply()
+        }
+    }
 }

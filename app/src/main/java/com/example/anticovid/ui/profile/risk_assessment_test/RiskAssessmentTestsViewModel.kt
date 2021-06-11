@@ -6,12 +6,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.anticovid.data.model.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.util.*
 
 class RiskAssessmentTestsViewModel(private val context: Context) : ViewModel() {
+    private var database: FirebaseDatabase
+    private var userId: String
 
     private val _isTodaysTestPerformed = MutableLiveData<Boolean>()
     val isTodaysTestPerformed: LiveData<Boolean> = _isTodaysTestPerformed
@@ -25,6 +29,8 @@ class RiskAssessmentTestsViewModel(private val context: Context) : ViewModel() {
             if (it.isNotEmpty())
                 checkIfTestFromToday(it.first())
         }
+        userId = FirebaseAuth.getInstance().currentUser!!.uid
+        database = FirebaseDatabase.getInstance("https://anticovid-93262-default-rtdb.europe-west1.firebasedatabase.app/")
     }
 
     private fun checkIfTestFromToday(test: RiskAssessmentTest) {
@@ -47,12 +53,30 @@ class RiskAssessmentTestsViewModel(private val context: Context) : ViewModel() {
     }
 
     private fun saveLatestResult(result: String) {
-        with (context.getSharedPreferences(SHARED_PREFERENCES_RISK_ASSESSMENT_TEST, Context.MODE_PRIVATE).edit()) {
-            putString(SHARED_PREFERENCES_RISK_ASSESSMENT_TEST_LATEST_RESULT, result)
+        var test_infection_risk = 1
+        when(result){
+            "LowRisk" -> test_infection_risk = 10
+            "MediumRisk" -> test_infection_risk = 30
+            "HighRisk" -> test_infection_risk = 100
+        }
+
+        with (context.getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE).edit()) {
+            putInt(SHARED_PREFERENCES_TEST_INFECTION_RISK, test_infection_risk)
             apply()
         }
 
-        Log.d("test_result", "Test result: $result")
+        val sharedPrefContactInfectionRisk = context.getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE)
+        val contact_infection_risk = sharedPrefContactInfectionRisk.getInt(SHARED_PREFERENCES_CONTACTS_INFECTION_RISK, 0)
+        val infection_risk = Math.max(contact_infection_risk, test_infection_risk)
+
+        database.reference.child("user-$userId").child("infectionRisk").setValue(infection_risk)
+
+        with (context.getSharedPreferences(SHARED_PREFERENCES_MY_DATA, Context.MODE_PRIVATE).edit()) {
+            putInt(SHARED_PREFERENCES_INFECTION_RISK, infection_risk)
+            apply()
+        }
+
+        Log.wtf("test_result", "Test result: $result Test infection risk: $test_infection_risk, Contacts: $contact_infection_risk, Total: $infection_risk")
     }
 
     private fun loadTestsPerformed(): List<RiskAssessmentTest> {
