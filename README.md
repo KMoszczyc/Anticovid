@@ -5,7 +5,9 @@ Mobile app designed to prevent the spreading of coronavirus (Kotlin + Firebase).
 - login and registration with Firebase
 - show covid-19 data for selected country with https://covid19api.com/
 - store user's location in Firebase Realtime Database and display all locations on a heatmap (google maps)
-- store user's contacts with other users (contact means being  10 metres within the reach of other user for at least 1 minute)
+- store user's contacts with other users (contact means being  10 metres within the reach of other user for at least 1 minute)  
+
+## Screens
 ![ezgif com-gif-maker (6)](https://user-images.githubusercontent.com/61971053/121818356-ff8c4980-cc86-11eb-8200-f24f93166dc3.gif)
 ![ezgif com-gif-maker (7)](https://user-images.githubusercontent.com/61971053/121818357-01560d00-cc87-11eb-9d93-c5c0f6c0af12.gif)  
 
