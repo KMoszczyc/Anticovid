@@ -1,5 +1,11 @@
 # Anticovid
-Mobile app designed to prevent the spreading of coronavirus (Kotlin + Firebase + Google Maps + Covid19 API).
+Mobile app designed to stop the spread of coronavirus (could be transformed to any other contagious disease)
+
+## Frameworks, APIs
+- Kotlin  
+- Firebase (Auth and Realtime Database)
+- Google Maps
+- Covid19 API
 
 ## Features
 - login and registration with Firebase
