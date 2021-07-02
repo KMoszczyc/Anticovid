@@ -1,11 +1,12 @@
 # Anticovid
 Mobile app designed to stop the spread of coronavirus (could be transformed to any other contagious disease)
 
-## Frameworks, APIs
+## Frameworks, APIs, Stack
 - Kotlin  
 - Firebase (Auth and Realtime Database)
 - Google Maps
 - Covid19 API
+- MVVM (Model, View, View-Model architecture)
 
 ## Features
 - login and registration with Firebase
